@@ -1,0 +1,8 @@
+{
+    "production": false,
+    "serviceUrl": "https://dev.greenwerx.org/",
+    "name":"local",
+    "version": "POC",
+    "theme" : "green-black-theme",
+    "viewtype" :"event"
+}

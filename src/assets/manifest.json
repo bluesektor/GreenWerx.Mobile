@@ -1,0 +1,15 @@
+{
+  "environment": "local",
+  "name": "GreenWerx Mobile",
+  "short_name": "GreenWerx",
+  "start_url": "index.html",
+  "display": "standalone",
+  "version": "POC",
+  "icons": [{
+    "src": "img/greenwerx.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
+  "background_color": "#387ef5",
+  "theme_color": "#387ef5"
+}
