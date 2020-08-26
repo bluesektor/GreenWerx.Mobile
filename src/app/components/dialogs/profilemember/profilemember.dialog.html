@@ -1,0 +1,102 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Profile Member
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+<ion-content >
+    <ion-card class="speaker-card">
+        <ion-card-header>
+            <!--  <ion-item detail="false" lines="none"  (click)="goToMemberDetail(profileMember)"> -->
+           <ion-item detail="false" lines="none" >
+             <!--<ion-avatar slot="start">
+                    <img [src]="profileMember.Image" alt="profile pic">
+                  </ion-avatar>
+              
+                  [class]="isValidName === true ? 'validName' : 'invalidName'"
+
+               [style]="{  'width':'30%',  'z-index':'900 !important', 'position':'relative  !important' }"
+
+               ng-class="{'green':employee.tStatus == 'Present','color: red':employee.tStatus == 'Absent'}"
+                -->
+           
+            <ion-input    [ngClass]="isValidName ? 'validName' : 'invalidName'"
+              style="text-align: left;width:100%;" type="text"    placeholder="Username*" 
+                   name="name" [(ngModel)]="profileMember.Name"   (ionChange)="onSearchUserNames()"  ></ion-input>
+                   
+                   
+          </ion-item>
+          <ion-item>
+              <label style="font-size: x-small">*A user will be created for the meber to login with.</label>
+          </ion-item>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-list>
+              <ion-item>
+                <label>Height</label>
+                <ion-select id="cboHeightOptions" name="cboHeightOptions" 
+                placeholder="Select Height"
+                okText="Okay" cancelText="Dismiss"
+                [(ngModel)]="profileMember.Height"
+                (ngModelChange)="onCboChangeHeight($event)" >
+              <ion-select-option   *ngFor="let inch of inches"  [value]="inch.value"    >{{inch.label}}</ion-select-option>
+            </ion-select> 
+            </ion-item>
+              <ion-item>
+                  <label>Weight</label> 
+                  <ion-input style="text-align: right;" myNumberOnly type="text"   
+                                name="weight" [(ngModel)]="profileMember.Weight"   ></ion-input>
+              </ion-item>
+            <ion-item>
+             <ion-label  >DOB</ion-label>
+             <ion-datetime displayFormat="MMM DD YYYY"  name="dob{{profileMember.UUID}}" #dob="ngModel"
+                     (ionChange)="onChangeDob($event)"
+                       [(ngModel)]="profileMember.DOB"></ion-datetime>
+            </ion-item>
+            <ion-item>
+                <label>Orientation</label>  &nbsp;&nbsp; <!--todo style right -->
+                
+                  <p-dropdown [options]="orientations"   name="orientation-" appendTo="body" style="width:100% !important;"
+                  (onChange)="onCboChangeOrientation($event)"
+                  placeholder="Select Orientation"
+                  [style]="{  'width':'100% !important','z-index':'900 !important', 'position':'relative !important' }"
+                  [(ngModel)]="profileMember.Orientation"  ></p-dropdown>
+               
+            </ion-item>
+            <ion-item>
+                <label>Gender</label>  &nbsp;&nbsp; <!--todo style right -->
+                
+                  <p-dropdown [options]="genders"   name="gender-" appendTo="body" style="width:100% !important;"
+                  (onChange)="onCboChangeGender($event)"
+                  placeholder="Select Gender"
+                  [style]="{  'width':'100% !important','z-index':'900 !important', 'position':'relative !important' }"
+                  [(ngModel)]="profileMember.Gender"  ></p-dropdown>
+               
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+      <ion-row  > 
+          <ion-col>
+              <button  *ngIf="isValidProfile === true"
+                
+                (click)="saveMember()"
+                class="login_btn"
+                type="button" expand="block">Save</button>
+                
+          </ion-col>
+        <ion-col>
+            <button
+           
+            (click)="dismiss()"
+            class="white_btn"
+            type="button" expand="block">Cancel</button>
+            <!--
+              [disabled]="message.Comment.length === 0 || sendingMessage === true" 
+               [disabled]="message.Comment.length === 0 || sendingMessage === true" -->
+      </ion-col>      
+      </ion-row>
+</ion-content>
+        

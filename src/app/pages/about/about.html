@@ -3,9 +3,9 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>About</ion-title>
+    <img style="display: block;margin: auto;" src="../../../assets/img/header.dark.png" />
     <ion-buttons slot="end">
-      <ion-button (click)="presentPopover($event)">
+      <ion-button disabled="disabled" style="color:transparent;" (click)="presentPopover($event)">
         <ion-icon slot="icon-only" name="more"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -13,9 +13,9 @@
 </ion-header>
 
 <ion-content>
-  <div class="about-header">
-    <img src="assets/img/greenwerx_header.png" alt="GreenWerx logo">
-  </div>
+  <!-- class="about-header">
+    <img src="assets/img/header.dark.png" alt="GreenWerx.org">
+  </div> target="_blank"-->
   <div padding class="about-info">
     <h4>{{appSettings.manifest.name}}</h4>
 
@@ -25,14 +25,13 @@
             <ion-label>Version: {{appSettings.manifest.version}}</ion-label>
         </ion-item>
     </ion-list>
-    <p>
-      The GreenWerx mobile project is a starter app demonstrate how to use some of the features available in the GreenWerx API.
-    </p>
-    <p>
-        <a style="color:#5b974e;" href="https://greenwerx.org" >GreenWerx.org</a>  is a set of open source projects that include mobile, web,
-      applications and API.
-    </p>
+    <ion-list>
+      <ion-item>
+          <p style="align-content: center;">
+        </p>
+      </ion-item>
+    </ion-list>
+    
+       
   </div>
-  
-  
 </ion-content>

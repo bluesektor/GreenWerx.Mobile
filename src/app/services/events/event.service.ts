@@ -1,5 +1,5 @@
-// Copyright 2015, 2017 GreenWerx.org.
-// Licensed under CPAL 1.0,  See license.txt  or go to http://greenwerx.org/docs/license.txt  for full license details.
+// Copyright 2015, 2017 Greenwerx.org.
+// Licensed under CPAL 1.0,  See license.txt  or go to https://greenwerx.org/docs/license.txt  for full license details.
 
 import {  Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
@@ -7,6 +7,7 @@ import { Api } from '../api/api';
 import { Account, EventLocation , Favorite, Filter,  Screen} from '../../models/index';
 import { Observable, of as observableOf} from 'rxjs';
 import {EventsDashboard} from '../../models/index';
+import {ServiceResult} from '../../models/serviceresult';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,6 @@ import {EventsDashboard} from '../../models/index';
 export class EventService  {
 
    public Dashboard: EventsDashboard;
-
-   public Favorites: Favorite[] = [];
 
    public Categories: string[] = [];
 
@@ -26,12 +25,20 @@ export class EventService  {
    // These are selected screens by user in the event-filter.ts
    // NOTE: in the filter dialog this only supports boolean fields i.e. private, active..
    // public EventScreens: Screen[] = [];
-    public EventFilter: Filter = new Filter();
+  //  public EventFilter: Filter = new Filter();
 
    public AvailableScreens:  Screen[] = []; // cache this
 
 
     constructor(private api: Api ) {
+      /*
+      this.EventFilter.SortBy = 'StartDate';
+      this.EventFilter.SortDirection = 'asc';
+      this.EventFilter.PageSize = 50;
+      this.EventFilter.StartIndex = 0;
+      this.EventFilter.PageResults = true;
+      */
+
         this.Properties.push({
             name:  'private',
             caption: 'Include Private',
@@ -39,109 +46,86 @@ export class EventService  {
           });
     }
 
-    logOut() {
-        this.EventFilter  = new Filter();
-        this.Favorites = [];
-        this.AvailableScreens = [];
-    }
-
-    getEventCategories() {
-        return this.api.invokeRequest('GET', 'api/Events/Categories' );
-    }
-
-    getDashboard(view: string, filter?: Filter) {
-        return this.api.invokeRequest('POST', 'api/Apps/Dashboard/' + view , JSON.stringify(filter) );
-    }
-
     addEvent(event) {
-      return this.api.invokeRequest('POST', 'api/Events/Add', JSON.stringify(event));
+      return this.api.invokeRequest('POST', 'api/Events/Add', event);
+    }
+
+    addEventLocation(eventLocation: EventLocation) {
+      return this.api.invokeRequest('POST', 'api/Events/Location/Insert',  eventLocation );
     }
 
     deleteEvent(eventUUID) {
-      return this.api.invokeRequest('DELETE', 'api/Events/Delete/' + eventUUID, ''    );
+      return this.api.invokeRequest('POST', 'api/Events/Delete/' + eventUUID, ''    );
     }
 
-    getEvents(filter?: Filter):  Observable<Object> {
-      return this.api.invokeRequest('POST', 'api/Events'  , JSON.stringify(filter) );
+    getDashboard(view: string, filter?: Filter) {
+        return this.api.invokeRequest('POST', 'api/Apps/Dashboard/' + view , filter );
     }
-
-    getHostEvents(accountUUID: string , filter?: Filter):  Observable<Object> {
-        return this.api.invokeRequest('POST', 'api/Events/Hosts/' + accountUUID  , JSON.stringify(filter) );
-      }
 
     getEvent(eventId) {
       if (this.Dashboard !== undefined && this.Dashboard.Events !== undefined) {
         for (let i = 0; i < this.Dashboard.Events.length; i++) {
             if ( this.Dashboard.Events[i].UUID === eventId ) {
-                return observableOf(this.Dashboard.Events[i] );
+              const res = new ServiceResult();
+              res.Code = 200;
+              res.Result = this.Dashboard.Events[i];
+                return observableOf( res);
             }
         }
       }
       return this.api.invokeRequest('GET', 'api/EventBy/' + eventId, ''    );
         }
 
-    updateEvent(event) {
-      return this.api.invokeRequest('PATCH', 'api/Events/Update', event);
+    getEventCategories() {
+        return this.api.invokeRequest('GET', 'api/Events/Categories' );
     }
 
     getEventLocation(eventUUID) {
         if (this.Dashboard !== undefined && this.Dashboard.Locations !== undefined) {
             for (let i = 0; i < this.Dashboard.Locations.length; i++) {
                 if ( this.Dashboard.Locations[i].EventUUID === eventUUID ) {
-                    return observableOf(this.Dashboard.Locations[i] );
+                  const res = new ServiceResult();
+                  res.Code = 200;
+                  res.Result = this.Dashboard.Locations[i] ;
+                    return observableOf(res);
                 }
             }
         }
         return this.api.invokeRequest('GET', 'api/Events/Locations/' + eventUUID, ''    );
     }
 
-    getPreviousLocations() {
-        return this.api.invokeRequest('GET', 'api/Events/Locations/Account' );
-    }
-
-    saveEventLocation(eventLocation: EventLocation ) {
-       return this.api.invokeRequest('POST', 'api/Events/Location/Save',  JSON.stringify(eventLocation)    );
+    getEvents(filter?: Filter):  Observable<Object> {
+      return this.api.invokeRequest('POST', 'api/Events'  , filter );
     }
 
     // Returns reminders flagged as favorite
     getFavorites(filter: Filter) {
-        return this.api.invokeRequest('POST', 'api/Events/Favorites', JSON.stringify(filter) );
+        return this.api.invokeRequest('POST', 'api/Events/Favorites', filter );
     }
 
-    hasFavorite(eventUUID: string): boolean {
-        if (this.Favorites.length === 0) {
-            console.log('event.service.ts hasFavorite lenght is 0 returing false');
-            return false;
-        }
-        let found = false;
-        for (let i = 0; i < this.Favorites.length; i++) {
-            console.log('event.service.ts hasFavorite looking at this.Favorites[i].Event.UUID:', this.Favorites[i].Event.UUID);
+    getHostEvents(accountUUID: string , filter?: Filter):  Observable<Object> {
+        return this.api.invokeRequest('POST', 'api/Events/Hosts/' + accountUUID  , filter);
+      }
 
-            console.log('event.service.ts hasFavorite lenght is 0 returing false');
-            if (this.Favorites[i].Event.UUID === eventUUID ) {
-                console.log('event.service.ts hasFavorite found eventUUID:', eventUUID);
-                found = true;
-                return true;
-            }
-        }
-        return found;
+    getPreviousLocations() {
+        return this.api.invokeRequest('GET', 'api/Events/Locations/Account' );
     }
 
-    addFavorite(eventUUID: string):  Observable<Object> {
-        if (this.hasFavorite(eventUUID) === true) {
-            return observableOf(null);
-        }
-        return this.api.invokeRequest('POST', 'api/Events/' + eventUUID + '/Favorite'  );
+    public logOut() {
+      this.Dashboard = null;
+      this.Dashboard = new EventsDashboard();
+      this.Categories = [];
+      this.Properties = [];
+      this.Accounts = [];
+    }
+    saveEventLocation(eventLocation: EventLocation ) {
+       return this.api.invokeRequest('POST', 'api/Events/Location/Save',   eventLocation    );
     }
 
-    removeFavorite(eventUUID: string):  Observable<Object> {
-        //  const index = this._favorites.indexOf(sessionName);
-        for (let i = 0; i < this.Favorites.length; i++) {
-            if (this.Favorites[i].Event.UUID === eventUUID ) {
-                this.Favorites.splice(i, 1);
-            }
-        }
-        return this.api.invokeRequest('DELETE', 'api/Events/' + eventUUID + '/Favorite'  );
+    updateEvent(event) {
+      return this.api.invokeRequest('PATCH', 'api/Events/Update', event);
     }
-
+    updateEventLocation(eventLocation: EventLocation  ) {
+       return this.api.invokeRequest('POST', 'api/Events/Location/Update',  eventLocation  );
+    }
 }

@@ -1,12 +1,12 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
-import { AlertController, ToastController } from '@ionic/angular';
+import {SendAccountInfoForm} from '../password/SendAccountInfoForm';
+import { AlertController } from '@ionic/angular';
 import { UserService } from '../../services';
 import { ServiceResult } from '../../models/serviceresult';
 import { Message } from '../../models/index';
-import {EventLoop} from '../..//services/event.loop';
-
+import { Events } from '@ionic/angular';
+import {EmailService } from '../../services/messaging/email.service';
 @Component({
   selector: 'page-support',
   templateUrl: 'support.html',
@@ -14,55 +14,31 @@ import {EventLoop} from '../..//services/event.loop';
   encapsulation: ViewEncapsulation.None
 })
 export class SupportPage {
-  sendingMessage = false;
+  processing = false;
   message: Message;
   submitted = false;
   result = '';
+  supportOption: string;
+  showSupportQuestion = false;
 
   constructor(
     public alertCtrl: AlertController,
-    public toastCtrl: ToastController,
     private userService: UserService,
-    private messages: EventLoop
+    private messages: Events,
+    private emailService: EmailService
       ) {
         this.message = new Message();
       }
 
-  async ionViewDidEnter() {
-    this.submitted = false;
-    this.message.Comment = '';
-    this.message.SentFrom = '';
-  }
-
-  async submit(form: NgForm) {
-    this.submitted = true;
-
-    if (form.valid === false) {
-      return;
+  hideCommentError(): boolean {
+    if ( this.submitted === false) {
+      return true;
     }
-    this.sendingMessage = true;
-    console.log('sendMessage:', this.message);
+    if (this.message.Body === '') {
+      return false;
+    }
 
-    this.message.Type  = 'SUPPORT'; // todo add dropdown for different message types so user can select.
-
-    await this.userService.contactAdmin( this.message).subscribe(response => {
-      const data = response as ServiceResult;
-      this.sendingMessage = false;
-
-      if (data.Code !== 200) {
-          this.result = data.Message;
-          return false;
-        }
-       this.result = 'Your support request has been sent.';
-
-    }, err => {
-      this.sendingMessage = false;
-      this.messages.publish('service:err', err);
-         if (err.status === 401) {
-           console.log('session expired');
-         }
-      });
-
+    return true;
   }
 
   hideEmailError(): boolean {
@@ -71,26 +47,97 @@ export class SupportPage {
       return true;
     }
 
-    if (this.message.SentFrom === '') {
-      console.log('support.ts hideEmailError this.message.SentFrom === ""');
+    if (this.message.EmailFrom === '') {
+      console.log('support.ts hideEmailError this.message.EmailFrom === ""');
       return false;
     }
     console.log('support.ts hideEmailError true');
     return true;
   }
 
-  hideCommentError(): boolean {
-    if ( this.submitted === false) {
-      return true;
-    }
-    if (this.message.Comment === '') {
-      return false;
-    }
-
-    return true;
+  async ionViewDidEnter() {
+    this.submitted = false;
+    this.message.Body = '';
+    this.message.EmailFrom = '';
   }
 
+  async onResetPassword(form: NgForm, forgotPassword: boolean) {
+    this.processing = true;
+    const frmChange = new SendAccountInfoForm();
+    frmChange.ForgotPassword = forgotPassword; // if false send account info email, true send password reset link
+    frmChange.Email = this.message.EmailFrom;
+    await this.userService.sendUserInfo(frmChange).subscribe((response) => {
+      this.processing = false;
+          const data = response as ServiceResult;
+          if (data.Code !== 200) {
+            this.messages.publish('api:err', data);
+            return false;
+          }
+          this.messages.publish('api:ok', 'Please check your email for instructions on updating your password.');
+         }, (err) => {
+          this.processing = false;
+          this.messages.publish('service:err', err);
+         });
+  }
 
+  onSelectSupportOption(event) {
+    console.log('support.ts onSelectSupportOption event:', event);
+    this.supportOption = event;
+    switch (this.supportOption) {
+      case 'sendMessage':
+        this.showSupportQuestion = true;
+        break;
+      default:
+        this.showSupportQuestion = false;
+        break;
+    }
+  }
+
+  async sendSupportMessage(form: NgForm) {
+    this.submitted = true;
+
+    if (form.valid === false) {
+      return;
+    }
+    this.processing = true;
+    console.log('sendMessage:', this.message);
+
+    this.message.Type  = 'SUPPORT'; // todo add dropdown for different message types so user can select.
+
+    await this.emailService.contactAdmin( this.message).subscribe(response => {
+      const data = response as ServiceResult;
+      this.processing = false;
+
+      if (data.Code !== 200) {
+          this.result = data.Message;
+          return false;
+        }
+       this.result = 'Your support request has been sent.';
+
+    }, err => {
+      this.processing = false;
+
+         if (err.status === 401) {
+          // // this.messages.publish('user:logout');
+          return;
+         }
+         this.messages.publish('service:err', err);
+      });
+  }
+
+  async submit(form: NgForm) {
+    switch (this.supportOption) {
+      case 'sendMessage':
+        this.sendSupportMessage(form);
+        break;
+      case 'resetPassword':
+        this.onResetPassword(form, true);
+        break;
+        case 'sendAccountInfo':
+            this.onResetPassword(form, false);
+          break;
+    }
+  }
 
   // If the user enters text in the support question and then navigates
   // without submitting first, ask if they meant to leave the page
@@ -99,7 +146,6 @@ export class SupportPage {
   //   if (!this.supportMessage || this.supportMessage.trim().length === 0) {
   //     return true;
   //   }
-
   //   return new Promise((resolve: any, reject: any) => {
   //     const alert = await this.alertCtrl.create({
   //       title: 'Leave this page?',
@@ -109,7 +155,6 @@ export class SupportPage {
   //         { text: 'Leave', role: 'cancel', handler: resolve }
   //       ]
   //     });
-
   //     await alert.present();
   //   });
   // }

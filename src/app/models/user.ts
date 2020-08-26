@@ -1,9 +1,14 @@
-// Copyright 2015, 2017 GreenWerx.org.
-// Licensed under CPAL 1.0,  See license.txt  or go to http://greenwerx.org/docs/license.txt  for full license details.
+// Copyright 2015, 2017 Greenwerx.org.
+// Licensed under CPAL 1.0,  See license.txt  or go to https://greenwerx.org/docs/license.txt  for full license details.
 
 import { Node } from './node';
 
 export class User extends Node {
+
+    constructor() {
+        super();
+        this.AgreedToTOS = null;
+    }
 
     Email: string;
 
@@ -14,4 +19,18 @@ export class User extends Node {
     PasswordQuestion: string;
 
     PasswordAnswer: string;
+
+    RelationshipStatus: string;
+
+    DOB: Date;
+
+    Gender: string;
+
+    AgreedToTOS: Date;
+
+    AffiliateTOSAgreementDate: Date;
+
+    ReferringMember: string;
+
+    IsAffiliate: boolean;
 }

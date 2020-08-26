@@ -9,7 +9,9 @@ export enum ConnectionStatus {
     Offline
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+  })
 export class NetworkService {
 
     public status: ConnectionStatus;
@@ -17,9 +19,17 @@ export class NetworkService {
 
     constructor(
         //   public network: Network, <= this was causing app to stop working.
-        public events: Event
+        public events: Events
     ) {
         this.status = ConnectionStatus.Online;
+    }
+
+  //  public getNetworkType(): string {
+  //      return this.network.type;
+  //  }
+
+    public getNetworkStatus(): Observable<ConnectionStatus> {
+        return this._status.asObservable();
     }
 
     public initializeNetworkEvents(): void {
@@ -38,14 +48,6 @@ export class NetworkService {
         //       }
         //   });
 
-    }
-
-  //  public getNetworkType(): string {
-  //      return this.network.type;
-  //  }
-
-    public getNetworkStatus(): Observable<ConnectionStatus> {
-        return this._status.asObservable();
     }
 
     private setStatus(status: ConnectionStatus) {

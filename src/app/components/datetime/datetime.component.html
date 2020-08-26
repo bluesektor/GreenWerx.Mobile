@@ -1,0 +1,51 @@
+<h6>{{Title}}</h6>
+<div *ngIf="ShowDate === true" class="row" style="width: 100%;">
+    
+        <p-dropdown  [options]="months"  name="months" appendTo="body" style="text-align: right;"
+            (onChange)="onCboChangeMonth($event )"
+            placeholder="Month"
+            [style]="{  'width':'35%','z-index':'900 !important', 'position':'relative  !important'}"
+            [(ngModel)]="Month"  >
+        </p-dropdown>
+   
+        <p-dropdown  [options]="days"  name="days" appendTo="body"
+            (onChange)="onCboChangeDay($event )"
+            placeholder="Day"
+            [style]="{  'width':'25%', 'z-index':'900 !important', 'position':'relative  !important'}"
+            [(ngModel)]="Day"  >
+        </p-dropdown>
+   
+    
+        <p-dropdown  [options]="years"  name="years" appendTo="body"
+            (onChange)="onCboChangeYear($event )"
+            placeholder="Year"
+            [style]="{  'width':'30%',  'z-index':'900 !important', 'position':'relative  !important' }"
+            [(ngModel)]="Year"  >
+        </p-dropdown>
+ 
+</div>
+
+<div *ngIf="ShowTime === true" style="width: 100%; margin-top:5px;">
+        <p-dropdown  [options]="hours"  name="hours" appendTo="body" style="text-align: right;"
+            (onChange)="onCboChangeHour($event )"
+            placeholder="Hour"
+            [style]="{  'width':'30%','z-index':'900 !important', 'position':'relative  !important'}"
+            [(ngModel)]="Hour"  >
+        </p-dropdown>
+
+        <p-dropdown  [options]="minutes"  name="minutes" appendTo="body" style="text-align: left;"
+            (onChange)="onCboChangeMinute($event )"
+            placeholder="Minutes"
+            [style]="{  'width':'30%','z-index':'900 !important', 'position':'relative  !important'}"
+            [(ngModel)]="Minute"  >
+        </p-dropdown>
+
+
+        <p-dropdown  [options]="ampms"  name="ampms" appendTo="body" style="text-align: left;"
+            (onChange)="onCboChangeAmPm($event )"
+            placeholder="Am/Pm"
+            [style]="{  'width':'30%','z-index':'900 !important', 'position':'relative  !important'}"
+            [(ngModel)]="AmPm"  >
+        </p-dropdown>
+   
+</div>

@@ -1,5 +1,7 @@
 {
-  "name": "myApp",
-  "integrations": {},
+  "name": "GreenWerx",
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

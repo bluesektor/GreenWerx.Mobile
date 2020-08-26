@@ -6,9 +6,11 @@ import { SessionService } from '../../services/session.service';
 import {InventoryService } from '../../services/store/inventory.service';
 import {UserService} from '../../services/user/user.service';
 import {FileEx, ServiceResult, User} from '../../models/index';
-import {EventLoop} from '../../services/event.loop';
+import { Events } from '@ionic/angular';
 import { ObjectFunctions} from '../../common/object.functions';
 import {ChangePasswordPage} from '../password/change-password';
+ import {ProfileEditPage} from '../profile-edit/profile-edit.page';
+ import {PreferencesEditPage} from '../preferences-edit/preferences-edit.page';
 
 @Component({
   selector: 'page-account',
@@ -31,20 +33,75 @@ export class AccountPage implements AfterViewInit, OnInit {
     private session: SessionService,
     private inventoryService: InventoryService,
     private userService: UserService,
-    public messages: EventLoop,
+    public messages: Events,
     public modalCtrl: ModalController ) {
       this.user.Image = '../../assets/img/blankprofile.png';
     }
 
-  ngAfterViewInit() { }
+ async callTestService() {
+  console.log('ACCOUNT.ts callTestService ');
 
-  ngOnInit() {
-    this.loadUser();
+    await this.userService.test().subscribe((response) => {
+      console.log('ACCOUNT.ts callTestService response:', response);
+      const data = response as ServiceResult;
+      if (data.Code !== 200) {
+        if (data.Code === 401) {
+          // this.messages.publish('user:logout');
+          return;
+        }
+        this.messages.publish('api:err', data);
+        return;
+      }
+    });
+  }
+
+  async changePassword() {
+    console.log('Clicked to change password');
+
+      const modal = await this.modalCtrl.create({
+        component: ChangePasswordPage
+      });
+      await modal.present();
+
+      const { data } = await modal.onWillDismiss();
+  }
+
+  async editPreferences() {
+
+    const modal = await this.modalCtrl.create({ component: PreferencesEditPage });
+
+    // modal.onDidDismiss(data => {      });
+    return await modal.present();
+  }
+
+  async editProfile() {
+
+    const profileUUID = 'todo_fix_testfornow';
+    console.log('SETTINGS.TS openProfileModal profileUUID:', profileUUID);
+
+    const modal = await this.modalCtrl.create({ component: ProfileEditPage });
+
+    // modal.onDidDismiss(data => {      });
+    return await modal.present();
+
+  }
+
+  isDefaultSet(): boolean {
+    if ( !this.images || this.images.length === 0 ) {
+      return false;
+    }
+
+    for (let i = 0; i < this.images.length; i++) {
+      if (this.images[i].Default === true) {
+        return true;
+      }
+    }
+    return false;
   }
 
   loadUser() {
     if (ObjectFunctions.isValid(this.session.CurrentSession) === false || this.session.CurrentSession.UserUUID === '') {
-      this.messages.publish('console:log', 500, 'ACCOUNT.ts loadUser this.session.CurrentSession.UserUUID not set.');
+      this.messages.publish('console:log', 'err', 'ACCOUNT.ts loadUser A this.session.CurrentSession.UserUUID not set.');
       return;
     }
 
@@ -53,24 +110,53 @@ export class AccountPage implements AfterViewInit, OnInit {
       console.log('ACCOUNT.ts loadUser response:', response);
       const data = response as ServiceResult;
       if (data.Code !== 200) {
-        this.messages.publish('api:err', 500, data);
+        if (data.Code === 401) {
+          // this.messages.publish('user:logout');
+          return;
+        }
+        this.messages.publish('api:err', data);
         return;
       }
       this.user = data.Result;
-    });
+    }, err => {
+      this.processingRequest = false;
+
+
+      if (err.status === 401) {
+        // this.messages.publish('user:logout');
+        return;
+      }
+      this.messages.publish('service:err', err.statusText, 4);
+  });
 
   }
+
+  logout() {
+    console.log('account.ts logout');
+    this.messages.publish('user:logout');
+  }
+
+  ngAfterViewInit() { }
+
+  ngOnInit() {
+    this.loadUser();
+  }
+
+  support() {
+    this.router.navigateByUrl('/support');
+  }
+
 
   uploadImageEvent(imageEvent, index) {
     console.log('Clicked to update picture');
 
     if ( this.images.length === this.maxFileUpload ) {
-      this.messages.publish('service:err', 500,'Maximum number of images is ' + this.maxFileUpload);
+      this.messages.publish('service:err', 'Maximum number of images is ' + this.maxFileUpload);
       return;
     }
 
     if (!imageEvent.target.files || imageEvent.target.files.length === 0) {
-      this.messages.publish('service:err',500, 'You must select a file to upload.');
+      this.messages.publish('service:err', 'You must select a file to upload.');
       return;
     }
 
@@ -83,7 +169,7 @@ export class AccountPage implements AfterViewInit, OnInit {
 
        // Only pics
       if (!file.type.match('image')) {
-        this.messages.publish('service:err', 500,'file type is not an image!');
+        this.messages.publish('service:err', 'file type is not an image!');
         continue;
       }
 
@@ -113,7 +199,11 @@ export class AccountPage implements AfterViewInit, OnInit {
       this.processingRequest = false;
 
         if (response.Code !== 200) {
-          this.messages.publish('service:err',500, response.Message);
+          if (response.Code === 401) {
+            // this.messages.publish('user:logout');
+            return;
+          }
+          this.messages.publish('service:err', response.Message);
             return false;
         }
         console.log('image upload response:',  response.Result);
@@ -121,48 +211,15 @@ export class AccountPage implements AfterViewInit, OnInit {
         this.user.Image = response.Result.ImageThumb;
       }, err => {
         this.processingRequest = false;
-        this.messages.publish('service:err', err.statusText, 4);
+
 
         if (err.status === 401) {
-           // setTimeout(() => {    this.navCtrl.push(LoginPage);}, 3000);
+          // this.messages.publish('user:logout');
+          return;
         }
+        this.messages.publish('service:err', err.statusText, 4);
     });
 }
 
-  }
-
-  isDefaultSet(): boolean {
-    if ( !this.images || this.images.length === 0 ) {
-      return false;
-    }
-
-    for (let i = 0; i < this.images.length; i++) {
-      if (this.images[i].Default === true) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  async changePassword() {
-    console.log('Clicked to change password');
-
-      const modal = await this.modalCtrl.create({
-        component: ChangePasswordPage
-      });
-      await modal.present();
-
-      const { data } = await modal.onWillDismiss();
-  }
-
-  logout() {
-    console.log('account.ts logout');
-    this.session.logOut().then(() => {
-      this.router.navigateByUrl('/login');
-    });
-  }
-
-  support() {
-    this.router.navigateByUrl('/support');
   }
 }

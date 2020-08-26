@@ -1,0 +1,18 @@
+<div class="container">
+    <div  *ngIf="isLoading" class="loading">
+      <!-- [ngStyle]="{height:height+'px',width:width+'px'}"
+        <img [src]="loader" />
+        -->
+        <ion-spinner name="lines"  style="display: block;margin: auto;height:100px;width:200px;color:orange;"  ></ion-spinner>
+    </div>
+
+
+    <!-- 
+        todo uncomment after we see how the spinner looks
+        (load)="hideLoader()" 
+       -->
+    <img [src]=image  [ngStyle]="{visibility:isLoading?'hidden':''}"
+     (load)="hideLoader()" (error)="hideLoader()"/>
+     
+</div>
+    

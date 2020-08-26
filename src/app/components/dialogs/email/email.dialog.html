@@ -1,0 +1,43 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Email
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+<ion-content >
+  
+    <ion-list lines="none">
+        <ion-item>
+            <ion-input placeholder="Subject"  [(ngModel)]="message.Subject"  type="text" required  ></ion-input>
+          </ion-item>
+    </ion-list>
+    <!-- [innerHTML]=
+    <ion-textarea style="height: 70%;border-color:lightgray" placeholder="Message"  [(ngModel)]="comment" ></ion-textarea>
+-->
+    <div  [(innerHTML)]="message.Body" id="txtMessage" data-text="Message" contenteditable="true" style="margin:5px;padding:5px;height: 70%;border-color:black;" ></div>
+    <hr/>
+    <ion-row  > 
+        <ion-col>
+            <button *ngIf="sendingMessage === false" 
+              
+              (click)="sendMessage()"
+              class="login_btn"
+              type="button" expand="block">Send</button>
+              <div *ngIf="sendingMessage === true" >
+                <ion-spinner   style="display: block;margin: auto;"  ></ion-spinner>
+                </div>
+        </ion-col>
+      <ion-col>
+          <button *ngIf="sendingMessage === false" 
+         
+          (click)="dismiss()"
+          class="white_btn"
+          type="button" expand="block">Cancel</button>
+          <!--
+            [disabled]="message.Comment.length === 0 || sendingMessage === true" 
+             [disabled]="message.Comment.length === 0 || sendingMessage === true" -->
+    </ion-col>      
+    </ion-row>
+</ion-content>
+        

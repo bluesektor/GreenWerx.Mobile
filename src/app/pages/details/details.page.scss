@@ -1,19 +1,24 @@
-app-details {
-    .host-detail img {
-      max-width: 140px;
-     // border-radius: 50%;
-    }
+app-details{ 
+ 
+// This stops the dropdown from being transparent.
+.ui-dropdown-panel .ui-dropdown-item {
+  background-color: white !important;
+  margin:0px !important;
+  }
+
   
+  .ui-panel-images {
+   // width: 100%;
+    height: 100%;
+    border-radius: 1%;
+}
+.ui-galleria-nav-prev, .ui-galleria-nav-next {
+  z-index: 902;
+  color:red;
+  }
+ 
     .host-detail p {
       color: #60646B;
-    }
-    .map-canvas {
-      position: absolute;
-      height: 90%;
-      width: 90%;
-      background-color: transparent;
-      opacity: 0;
-      transition: opacity 150ms ease-in
     }
   
     #map {
@@ -52,5 +57,5 @@ app-details {
   .fileInput :valid + span {
       color: #4A4;
   }
-  }
   
+}

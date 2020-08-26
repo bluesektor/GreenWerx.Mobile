@@ -1,0 +1,74 @@
+<ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="close()" style="color:red;" >Cancel</ion-button>
+          </ion-buttons>
+      
+          <ion-title>
+            Filter {{type | titlecase }}s
+          </ion-title>
+      
+          <ion-buttons slot="end">
+            <ion-button (click)="applyFilters()" style="color:green;" strong>Done</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+            
+      <ion-content class="outer-content" >
+        <ion-spinner *ngIf="loading === true"  style="display: block;margin: auto;"  ></ion-spinner>
+        <div *ngIf="loading === false">
+          <!--
+        <ion-list *ngIf="isUserInrole('OWNER')">
+            <ion-list-header>Properties</ion-list-header>
+            <ion-item >
+              <span slot="start" class="dot"></span>
+              <ion-label>Include Private</ion-label>
+              <ion-toggle [(ngModel)]="eventService.EventFilter.IncludePrivate" color="success"></ion-toggle>
+            </ion-item>
+        </ion-list>
+      -->
+      <ion-list  >
+          <ion-radio-group allow-empty-selection = "false" name="radio-group"  >
+            <ion-list-header>
+              <ion-label>Sort by</ion-label>
+            </ion-list-header>
+        
+            <ion-item  *ngFor="let sortby of sortByScreens"
+                (ionFocus)="radioFocus()"
+                (ionSelect)="onToggleSortBy($event, sortby)"
+                (ionBlur)="radioBlur()" >
+              <ion-label>{{sortby.Caption}}</ion-label>
+                <ion-radio slot="start" 
+                            value="{{sortby.Value}}"
+                            name="{{sortby.Name}}" 
+                            checked="{{sortby.Selected}}" 
+                ></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+
+        <ion-list *ngIf="type === 'HOST'">
+                <ion-item  *ngFor="let acctCategory of accountService.AvailableScreens" [attr.category]="acctCategory.Name | lowercase">
+                        <span slot="start" class="dot"></span>
+                        <ion-label>{{acctCategory.Caption}}</ion-label>
+                        <ion-toggle [(ngModel)]="acctCategory.Selected" color="success"></ion-toggle>
+                      </ion-item>
+        </ion-list>
+        <ion-list  *ngIf="type === 'EVENT'" >
+          <ion-list-header>Categories</ion-list-header>
+      
+          <ion-item *ngFor="let category of eventService.AvailableScreens" [attr.category]="category.Name | lowercase">
+            <span slot="start" class="dot"></span>
+            <ion-label>{{category.Caption}}</ion-label>
+            <ion-toggle [(ngModel)]="category.Selected" color="success"></ion-toggle>
+          </ion-item>
+        </ion-list>
+      
+        <ion-list>
+          <ion-item (click)="resetFilters()" detail="false" class="reset-filters">
+            Reset All Filters
+          </ion-item>
+        </ion-list>
+      </div>
+      </ion-content>
+            

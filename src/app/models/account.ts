@@ -2,6 +2,11 @@
 import { Node } from './node';
 
 export class Account extends Node {
+    constructor() {
+        super();
+        this.Image = '/assets/img/blankprofile.png';
+    }
+    Category: string;
     LocationUUID: string;
     LocationType: string;
 
@@ -13,6 +18,12 @@ export class Account extends Node {
     FavoritedByUserUUID: string;
 
     FavoritedByAccountUUID: string;
+
+    WebSite: string;
+
+    Distanse: number;
+
+    IsAffiliate: boolean;
 }
 
 

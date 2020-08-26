@@ -1,0 +1,69 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>location-edit</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+      <div *ngIf="showWait" style="width:100%; text-align: center;"> 
+        <ion-spinner   style="display: block;margin: auto;"  ></ion-spinner> </div>
+      
+      <div> <h6>{{locationCaption}}</h6>  
+      </div>
+      
+      <div >
+              <ion-input placeholder="Title"
+                placeholder="Enter Postal Code"
+                  [(ngModel)]="location.Postal"
+                  (ngModelChange)="searchForLocation($event)"
+                  name="Postal" type="text" >
+              </ion-input>
+      </div>
+      <hr/> OR <hr/>
+      <div *ngIf="showCountries === true" >
+          <ion-select id="cboCountries" name="cboCountries"
+                  placeholder="Select Country"
+                  okText="Okay" cancelText="Dismiss"
+                  [(ngModel)]="location.Country"
+                   (ngModelChange)="loadStates($event)"
+                   >
+              <ion-select-option *ngFor="let country of countries;" value="{{country.UUID}}"  [attr.selected]="location.Country === country.UUID"  >
+                  {{country.Name}}
+              </ion-select-option>
+          </ion-select>
+      </div>
+      <div  *ngIf="showStates === true  && states.length > 0" >
+          <ion-select id="cboState" name="cboState"
+                  placeholder="Select State"
+                  [(ngModel)]="location.State"
+                  (ngModelChange)="loadCities($event)">
+              <ion-select-option *ngFor="let state of states;" value="{{state.UUID}}" [attr.selected]="location.State === state.UUID" >
+                  {{state.Name}}
+              </ion-select-option>
+          </ion-select>
+      </div>
+      <div  *ngIf="showCities === true && cities.length > 0"  >
+          <ion-select  id="cboCity" name="cboCity"
+                placeholder="Select City"
+                  [(ngModel)]="location.City" 
+                  (ngModelChange)="citySelected($event)"
+                  >
+              <ion-select-option *ngFor="let city of cities;" value="{{city.UUID}}"  [attr.selected]="location.City === city.UUID" >
+                  {{city.Name}}
+              </ion-select-option>
+          </ion-select>
+      </div>
+      
+      <ion-list>
+            <ion-item>
+                    <label>Lat:{{lat}}</label>
+                </ion-item>
+                <ion-item>
+                    <label>Lon:{{lon}}</label>
+                </ion-item>
+      </ion-list>
+      <button *ngIf="saveDisabled === false" (click)="save()" type="button" class="login_btn"  expand="block">Update</button>
+      <br/><br/>
+      <button (click)="dismiss()" type="button"  class="white_btn" expand="block">Close</button>
+  </ion-content>
+  

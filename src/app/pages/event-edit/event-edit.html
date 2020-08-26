@@ -56,7 +56,9 @@
    
           <ion-list>
             <ion-label style="z-index:100;" >Description</ion-label>
-            <ion-textarea style="height: 150px;z-index:100;"  [(ngModel)]="event.Body" name="Body"  #body="ngModel" spellcheck="true"  ></ion-textarea>
+            <ion-textarea style="min-height: 300px;z-index:100;"  
+              [(ngModel)]="event.Description" name="Description"  #body="ngModel"
+             spellcheck="true"  ></ion-textarea>
           </ion-list>
     </form>  
      

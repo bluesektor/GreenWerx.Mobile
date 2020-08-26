@@ -1,10 +1,11 @@
-// Copyright 2015, 2017 GreenWerx.org.
-// Licensed under CPAL 1.0,  See license.txt  or go to http://greenwerx.org/docs/license.txt  for full license details.
+// Copyright 2015, 2017 Greenwerx.org.
+// Licensed under CPAL 1.0,  See license.txt  or go to https://greenwerx.org/docs/license.txt  for full license details.
 
 import {  Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Api } from '../api/api'; // '../api/api.service';
 import { Message } from '../../models/message';
+import { Filter } from '../../models/filter';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +16,13 @@ export class UserService  {
 
     }
 
-    register(user) {
-        return this.api.invokeRequest('POST', 'api/Accounts/Register', JSON.stringify(user));
+    addUser(user) {
+        return this.api.invokeRequest('POST', 'api/Users/Add', user);
+
     }
 
-    addUser(user) {
-        return this.api.invokeRequest('POST', 'api/Users/Add', JSON.stringify(user));
-
+    banUser(userUUID: string, isBanned: boolean ) {
+      return this.api.invokeRequest('PATCH', 'api/Users/' + userUUID + '/Flag/ban/Value/' + isBanned);
     }
 
     changePassword(frmChangePassword) {
@@ -32,44 +33,61 @@ export class UserService  {
         return this.api.invokeRequest('POST', '/api/Accounts/ChangePassword', frmChangePassword);
     }
 
+  
+
     deleteUser(userUUID) {
         return this.api.invokeRequest('DELETE', '/api/Users/Delete/' + userUUID, '');
     }
 
-    getUsers() {
-        return this.api.invokeRequest('GET', 'api/Users/' , ''    );
+  flagItem(type: string, uuid: string, accountUUID: string, flagName: string, value: string) {
+
+    return this.api.invokeRequest('PATCH', 'api/Generic/' + type + '/' + uuid +
+                                  '/accounts/' + accountUUID + '/Flag/' + flagName + '/Value/' + value );
+}
+
+    getAllUsers(filter?: Filter) {
+      return this.api.invokeRequest('POST', 'api/AllUsers' ,  filter );
+  }
+
+    getProfile() {
+      return this.api.invokeRequest('GET', 'api/Users/Profile');
     }
 
     getUser(userId) {
         return this.api.invokeRequest('GET', 'api/UsersBy/' + userId);
     }
 
-    test() {
-      return this.api.invokeRequest('GET', 'api/Tools/TestCode', ''    );
+    getUsers() {
+        return this.api.invokeRequest('GET', 'api/Users/' , ''    );
     }
 
-    contactUser(message: Message) {
-      return this.api.invokeRequest('POST', 'api/Users/Message' ,  JSON.stringify(message));
+    lockUser(userUUID: string, isLockedOut: boolean ) {
+      return this.api.invokeRequest('PATCH', 'api/Users/' + userUUID + '/Flag/lockedout/Value/' + isLockedOut);
     }
 
-    contactAdmin(message: Message) {
-        return this.api.invokeRequest('POST', 'api/Site/SendMessage' ,  JSON.stringify(message));
-      }
+    register(user) {
+        return this.api.invokeRequest('POST', 'api/Accounts/Register', user);
+    }
+
+    saveProfile(profile: any) {
+      return this.api.invokeRequest('GET', 'api/Users/Save', profile);
+    }
 
     sendUserInfo(userCredentials) {
         return this.api.invokeRequest('POST', 'api/Accounts/SendInfo', userCredentials);
     }
 
+    search(userName: string){
+       
+      return this.api.invokeRequest('GET', 'api/Users/' + userName);
+    }
+
+    test() {
+      return this.api.invokeRequest('GET', 'api/Tools/TestCode', ''    );
+    }
+
     updateUser(user) {
        return this.api.invokeRequest('PATCH', 'api/Users/Update', user);
-    }
-
-    getProfile() {
-      return this.api.invokeRequest('GET', 'api/Users/Profile');
-    }
-
-    saveProfile(profile: any) {
-      return this.api.invokeRequest('GET', 'api/Users/Save', profile);
     }
 
     validateUser( validationType: string, operation: string, validationCode: string) {
@@ -77,4 +95,5 @@ export class UserService  {
                                            '/operation/' + operation +
                                            '/code/' + validationCode, '');
     }
+
 }

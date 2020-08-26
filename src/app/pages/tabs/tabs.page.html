@@ -1,20 +1,34 @@
 <ion-tabs>
-
+ 
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="home">
-      <ion-icon name="home" id="icoHome" ></ion-icon>
-      <ion-label id="lblHome" >Home</ion-label>
+    <ion-tab-button tab="store" id="tab-button-store" (click)="onTabClick($event,'tab-button-store')"  >        
+      <ion-icon  style="height:22px;width:22px;" src="/assets/icon/store.svg"  alt="store" ></ion-icon>
+      <ion-label id="lblTabStore" >Store</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="events" id="tab-button-events" (click)="onTabClick($event,'tab-button-events')"  >        
+      <ion-icon  style="height:22px;width:22px;" src="/assets/icon/calendar.svg"  alt="events" ></ion-icon>
+      <ion-label id="lblTabEvents" >Events</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="map">
-      <ion-icon name="globe"></ion-icon>
-      <ion-label id="lblMap">Map</ion-label>
+    <ion-tab-button  tab="community"  id="tab-button-community" (click)="onTabClick($event,'tab-button-community')"    >
+       <ion-icon  style="height:22px;width:22px;" src="/assets/icon/community.svg"  alt="community" ></ion-icon>
+        <ion-label id="lblCommunity" >Community</ion-label>
     </ion-tab-button>
+   
+    <ion-tab-button badge="4" tab="messages"    id="tab-button-messages" (click)="onTabClick($event,'tab-button-messages')"    >
+        
+        <ion-icon id="icoMessages"   src="/assets/icon/messages.svg"  name="information-circle-outline"></ion-icon>
+        
+        <ion-label id="lblMessages"   >Messages</ion-label>
+        <ion-badge color="success" *ngIf="emailsUnreadCount > 0">{{emailsUnreadCount}}</ion-badge>
 
-    <ion-tab-button tab="about">
-      <ion-icon name="information-circle-outline"></ion-icon>
+    </ion-tab-button>
+ 
+
+    <ion-tab-button id="tab-button-about"  tab="about" (click)="onTabClick($event,'tab-button-about')"    >
+      <ion-icon id="icoAbout" name="information-circle-outline"></ion-icon>
       <ion-label id="lblAbout" >About</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
-
+ 
 </ion-tabs>

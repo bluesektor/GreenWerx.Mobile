@@ -1,0 +1,126 @@
+<ion-refresher #refresherRef [disabled]="false" (ionRefresh)="doRefresh($event)" style="z-index: 999;" slot="fixed">
+  <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+    refreshingText="Refreshing...">
+  </ion-refresher-content>
+</ion-refresher>
+
+<ion-list-header *ngIf="isLoading === true || (itemCount === 0 && isLoading === false)">
+  {{noDataMessage}}
+</ion-list-header>
+
+<div [ngSwitch]="viewType">
+  <div *ngSwitchCase="'EVENT'">
+   
+      <ion-spinner *ngIf="isLoading === true"  style="display: block;margin: auto;"  ></ion-spinner>
+     
+    <ion-virtual-scroll  [items]="cache.events"  >
+
+      <ion-item-sliding #slidingItem *virtualItem="let item">
+        <ion-item button (click)="goToItemDetail(item)">
+          <!-- width:64px; -->
+          <img *ngIf="item.UUIDType !== 'blank'" [src]="item.Image" [alt]="item.Name"
+                style="max-height:64px;max-width: 64px; height:64px !important;border-radius: 5%;padding-right: 3px;" item-start>
+
+                    <ion-label *ngIf="item.UUIDType !== 'blank'"  >
+                      <h5 style="vertical-align: top;">{{item.Name}}  </h5>  
+                      <h6>{{item.HostName}}</h6>
+                      <div   >
+                        <p style="font-size: small;">{{item.City}} {{item.State}} {{item.Country}}</p>
+                        <p style="font-size: small;">{{item?.StartDate.split("T")[0] | date:'mediumDate'}}  &mdash; {{item.EndDate.split("T")[0] | date:'mediumDate' }}  </p>
+                      </div>
+                    </ion-label>
+                    <div *ngIf="item.UUIDType !== 'blank'"    style="float:right;">
+                        <div   style="float:right;height:22px;width:22px;vertical-align: top;" >
+                              <img src="/assets/icon/{{item.Category | lowercase}}.svg" alt="{{item.Category}}" >
+                        </div>
+                        <br/>
+                     
+                      
+                        <!-- showDistance === true &&  -->
+                        <ion-label  *ngIf="item.Distance > 0"  style="float:right;vertical-align: bottom;font-size: small;" >
+                                {{item.Distance}} mi.
+                        </ion-label>
+                    </div>
+        </ion-item>    
+        <ion-item-options  >
+            <!-- ADMIN
+                <ion-item-option  *ngIf="segment === 'all' && ( item.CreatedBy === sessionService.CurrentSession.UserUUID || isAdmin === true)"
+                color="light" (click)="editItem(slidingItem, item)">
+                  Edit
+                </ion-item-option>
+                /ADMIN  -->
+                <ion-item-option  *ngIf="segment === 'all'  &&  sessionService.CurrentSession.UserUUID !== ''" 
+                                  style="color:#3880ff;"  
+                                  (click)="addFavoriteItem(slidingItem, item)" >
+                  Favorite</ion-item-option>
+                <ion-item-option *ngIf="segment === 'favorites'  && sessionService.CurrentSession.UserUUID !== ''" 
+                                  class="dangerColor" 
+                                  (click)="removeFavoriteItem(slidingItem,item)"  >
+                  Remove</ion-item-option>
+              </ion-item-options>
+        </ion-item-sliding> 
+      
+    </ion-virtual-scroll> 
+  </div>
+    <div *ngSwitchCase="'HOST'"  >
+        <ion-virtual-scroll #ctlList  [items]="cache.events"   > 
+  
+            <ion-item-sliding #slidingItem *virtualItem="let item">
+                <ion-item button (click)="goToItemDetail(item)">
+                    <img *ngIf="item.Status !== 'new' && item.UUIDType !== 'blank'"  [src]="item.Image" [alt]="item.Name"
+                      style="width:64px !important;height:64px !important;border-radius: 5%;padding-right: 3px;" item-start>
+                    <img *ngIf="item.Status === 'new' && item.UUIDType !== 'blank'"  [src]="item.Image" [alt]="item.Name"
+                      style="width:64px !important;height:64px !important;background-color: green; border-color:green;border-radius: 5%;padding-right: 3px;" item-start>
+
+                    <ion-label>
+                      <h6  style="vertical-align: top;">{{item.Name}}</h6>  
+                      <div *ngIf="viewType === 'PROFILE'"  >{{ item?.LocationCaption }}</div> 
+                    </ion-label>
+              
+                    <div  *ngIf="item.UUIDType !== 'blank'" style="float:right;height:22px;width:22px;vertical-align: top;">
+                      <img src="/assets/icon/{{item.Category | lowercase}}.svg" alt="{{item.Category}}" >
+                   
+                      <br/>
+                      <br/>
+                      <!-- showDistance === true &&   && item.Distance > 0 -->
+                      <ion-label *ngIf="item.UUIDType !== 'blank'" 
+                               style="float:right;vertical-align: bottom;" >{{item.Distance}} mi.</ion-label>
+                  </div>
+                  </ion-item>
+                  <ion-item-options  >
+                    <!-- ADMIN
+                      <ion-item-option  *ngIf="item.CreatedBy === sessionService.CurrentSession.UserUUID || isAdmin === true"
+                    color="light" (click)="editItem(slidingItem, item)">
+                      Edit
+                    </ion-item-option>
+                    /ADMIN -->
+                      <ion-item-option  *ngIf="segment === 'all'  &&  sessionService.CurrentSession.UserUUID !== ''" 
+                                        style="color:#3880ff;"  
+                                        (click)="addFavoriteItem(slidingItem, item)" >
+                        Favorite</ion-item-option>
+                      <ion-item-option *ngIf="segment === 'favorites'  && sessionService.CurrentSession.UserUUID !== ''" 
+                                        class="dangerColor" 
+                                        (click)="removeFavoriteItem(slidingItem,item)"  >
+                        Remove</ion-item-option>
+                    </ion-item-options>
+               
+              </ion-item-sliding>
+      
+            </ion-virtual-scroll> 
+  
+    </div>
+    <div *ngSwitchDefault  >
+      
+    </div>
+  </div>
+  <ion-infinite-scroll threshold="100px"    (ionInfinite)="loadMoreInViewPort($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+   
+
+
+
+

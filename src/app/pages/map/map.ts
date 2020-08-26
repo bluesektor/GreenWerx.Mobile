@@ -6,7 +6,7 @@ import { ServiceResult} from '../../models/serviceresult';
 import {  MapData, MarkerData } from '../../models/index';
 import {GoogleMapsService} from '../../services/geo/googlemaps.service';
 declare var google: any;
-import {EventLoop} from '../../services/event.loop';
+import { Events } from '@ionic/angular';
 
 
 @Component({
@@ -24,30 +24,9 @@ export class MapPage {
   loading = false;
 
   constructor(  public locationService: LocationService,
-    public messages: EventLoop,
+    public messages: Events,
     public mapsService: GoogleMapsService,
                 public platform: Platform  ) {  }
-
-  ionViewDidEnter() {
-    if (navigator.geolocation) {
-      this.canGetLocation = true;
-    }
-    this.loading = true;
-    console.log('map.ts ionViewDidEnter navigator.geolocation:', navigator.geolocation);
-
-    navigator.geolocation.getCurrentPosition((position) => {   // .watchPosition((position) => {
-      console.log('map.ts. ionViewDidEnter position:', position);
-      this.mapData.markers = [];
-      const markerData = new MarkerData();
-      markerData.name = 'You are here.';
-      markerData.center = true;
-      markerData.lat = position.coords.latitude;
-      markerData.lng = position.coords.longitude;
-      this.mapData.markers.push(markerData);
-      this.getAreaData(markerData, 10);
-    });
-
-  }
 
   getAreaData(markerData: MarkerData, distance: number) {
 
@@ -57,7 +36,7 @@ export class MapPage {
 
         if (data.Code !== 200) {
           this.loading = false;
-          this.messages.publish('api:err', 500, data);
+          this.messages.publish('api:err', data);
           return false;
         }
 
@@ -78,6 +57,27 @@ export class MapPage {
         this.messages.publish('service:err', err.statusText, 4);
 
     });
+  }
+
+  ionViewDidEnter() {
+    if (navigator.geolocation) {
+      this.canGetLocation = true;
+    }
+    this.loading = true;
+    console.log('map.ts ionViewDidEnter navigator.geolocation:', navigator.geolocation);
+
+    navigator.geolocation.getCurrentPosition((position) => {   // .watchPosition((position) => {
+      console.log('map.ts. ionViewDidEnter position:', position);
+      this.mapData.markers = [];
+      const markerData = new MarkerData();
+      markerData.name = 'You are here.';
+      markerData.center = true;
+      markerData.lat = position.coords.latitude;
+      markerData.lng = position.coords.longitude;
+      this.mapData.markers.push(markerData);
+      this.getAreaData(markerData, 10);
+    });
+
   }
 
   showMapMarkers( mapInfo: any) {

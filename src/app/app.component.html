@@ -7,15 +7,16 @@
             </ion-toolbar>
           </ion-header>
           <ion-content>
-    
+             
             <ion-list>
               <ion-list-header>
                 Navigate
               </ion-list-header>
               <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-                <ion-item [routerLink]="p.url">
-                  <ion-icon slot="start" id='icoComp{{p.title}}' [name]="p.icon"></ion-icon>
-                  <ion-label id='lblComp{{p.title}}' >
+                <ion-item (click)="onMenuClick(p.url, p.id)" style="cursor: pointer;">
+                    <ion-icon icon slot="start"   src="../assets/icon/{{p.icon}}"  alt="community" ></ion-icon>
+
+                  <ion-label id='{{p.Title}}' >
                     {{p.title}}
                   </ion-label>
                 </ion-item>
@@ -30,13 +31,18 @@
     
               <ion-menu-toggle auto-hide="false">
                 <ion-item routerLink="/account">
-                  <ion-icon slot="start" name="person"></ion-icon>
+                  <ion-icon slot="start" name="person"></ion-icon> 
                   <ion-label>
                     Account
                   </ion-label>
                 </ion-item>
               </ion-menu-toggle>
-    
+              <ion-menu-toggle auto-hide="false"> 
+                <ion-item routerLink="/profile-edit">
+                    <ion-icon slot="start" name="person"></ion-icon>
+                    <ion-label>Profile</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
               <ion-menu-toggle auto-hide="false">
                 <ion-item routerLink="/support">
                   <ion-icon slot="start" name="help"></ion-icon>
@@ -89,22 +95,35 @@
                 </ion-item>
               </ion-menu-toggle>
             </ion-list>
-          <!--  slides are not working in ionic 4
-            <ion-list>
+            <ion-list >
               <ion-list-header>
-                Tutorial
+                Legal
               </ion-list-header>
               <ion-menu-toggle auto-hide="false">
-                <ion-item button (click)="openTutorial()">
-                  <ion-icon slot="start" name="hammer"></ion-icon>
-                  <ion-label>Show Tutorial</ion-label>
+                <ion-item button (click)="showPrivacyPolicy()" >
+                  <ion-icon slot="start" name="paper"></ion-icon>
+                  <ion-label>
+                    Privacy Policy
+                  </ion-label>
                 </ion-item>
               </ion-menu-toggle>
+              <ion-menu-toggle auto-hide="false">
+                <ion-item button (click)="showTermsOfService()" >
+                  <ion-icon slot="start" name="paper"></ion-icon>
+                  <ion-label>
+                    Terms Of Service
+                  </ion-label>
+                </ion-item>
+              </ion-menu-toggle>
+            
+   
             </ion-list>
-            -->
           </ion-content>
         </ion-menu>
-    <ion-router-outlet main></ion-router-outlet>
+     
+    <ion-router-outlet #RouterOutlet main></ion-router-outlet>
   
   </ion-split-pane>
+  
+  <simple-notifications style="z-index: 9999999;" [options]="options"></simple-notifications>
 </ion-app>

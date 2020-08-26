@@ -1,5 +1,5 @@
-// Copyright 2015, 2017 GreenWerx.org.
-// Licensed under CPAL 1.0,  See license.txt  or go to http://greenwerx.org/docs/license.txt  for full license details.
+// Copyright 2015, 2017 Greenwerx.org.
+// Licensed under CPAL 1.0,  See license.txt  or go to https://greenwerx.org/docs/license.txt  for full license details.
 
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
@@ -15,15 +15,15 @@ export class CategoriesService  {
     }
 
     addCategory(category) {
-        return this.api.invokeRequest('POST', 'api/Categories/Add', JSON.stringify(category));
-    }
-
-    getCategories(filter: Filter) {
-        return this.api.invokeRequest('POST', 'api/Categories' , JSON.stringify(filter), );
+        return this.api.invokeRequest('POST', 'api/Categories/Add', category);
     }
 
     deleteCategory(categoryUUID: string) {
         return this.api.invokeRequest('DELETE', 'api/Categories/Delete/' + categoryUUID , ''    );
+    }
+
+    getCategories(filter: Filter) {
+        return this.api.invokeRequest('POST', 'api/Categories' , filter, );
     }
 
     updateCategory(category) {

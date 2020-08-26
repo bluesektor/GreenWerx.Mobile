@@ -3,6 +3,10 @@ import { Node } from './node';
 
 export class EventLocation extends Node {
 
+   constructor() {
+      super();
+      this.City = '';
+   }
     Latitude: string;
 
     Longitude: string;
@@ -20,7 +24,7 @@ export class EventLocation extends Node {
 
     LocationType: string;
 
-    TimeZoneUUID: number;
+    TimeZone: number;
 
     FirstName: string;
 

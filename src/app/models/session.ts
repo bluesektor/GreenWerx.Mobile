@@ -1,5 +1,7 @@
-﻿// Copyright 2015, 2017 GreenWerx.org.
-// Licensed under CPAL 1.0,  See license.txt  or go to http://greenwerx.org/docs/license.txt  for full license details.
+﻿// Copyright 2015, 2017 Greenwerx.org.
+// Licensed under CPAL 1.0,  See license.txt  or go to https://greenwerx.org/docs/license.txt  for full license details.
+
+import {Profile} from './profile';
 
 export class Session {
 
@@ -12,7 +14,7 @@ export class Session {
         this.ShoppingCartUUID = '';
         this.LastSettingUUID = '';
         this.IsPersistent = false;
-        this.ProfileUUID = '';
+        this.Profile = new Profile();
     }
 
     UUID: string;
@@ -40,6 +42,6 @@ export class Session {
 
     ShoppingCartUUID: string;
 
-    ProfileUUID: string;
-
+   // ProfileUUID: string;
+    Profile: Profile;
 }

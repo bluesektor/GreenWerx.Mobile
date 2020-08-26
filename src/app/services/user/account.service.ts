@@ -1,5 +1,5 @@
-// Copyright 2015, 2017 GreenWerx.org.
-// Licensed under CPAL 1.0,  See license.txt  or go to http://greenwerx.org/docs/license.txt  for full license details.
+// Copyright 2015, 2017 Greenwerx.org.
+// Licensed under CPAL 1.0,  See license.txt  or go to https://greenwerx.org/docs/license.txt  for full license details.
 
 import {  Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
@@ -14,42 +14,60 @@ export class AccountService  {
 
     public AvailableScreens:  Screen[] = []; // cache th
 
-    public Favorites: Favorite[] = [];
-
     public Categories: string[] = [];
 
        // These are selected screens by user in the event-filter.ts
    // NOTE: in the filter dialog this only supports boolean fields i.e. private, active..
    // public EventScreens: Screen[] = [];
-   public AccountFilter: Filter = new Filter();
+  /// public AccountFilter: Filter = new Filter();
 
-    constructor(private api: Api ) {    }
+    constructor(private api: Api ) {
+     //   this.AccountFilter = this.api.initializeFilterLocation(this.AccountFilter);
+     //   this.AccountFilter.SortBy = 'Name';
+      //  this.AccountFilter.SortDirection = 'asc';
+      //  this.AccountFilter.PageSize = 50;
+      //  this.AccountFilter.StartIndex = 0;
+       // this.AccountFilter.PageResults = true;
+      }
 
     addAccount(account) {
         return this.api.invokeRequest('POST', 'api/Accounts/Add', account);
     }
 
-    getAccountCategories() {
-        return this.api.invokeRequest('GET', 'api/Accounts/Categories' );
+    addUsersToAccount(accountUUID: string, users: Node[]) {
+
+        return this.api.invokeRequest('POST', 'api/Accounts/' + accountUUID + '/Users/Add', users);
+    }
+
+    addUserToAccount(accountUUID: string, userUUID: string) {
+        return this.api.invokeRequest('POST', 'api/Accounts/' + accountUUID + '/Users/' + userUUID + '/Add');
     }
 
     deleteAccount(accountUUID) {
         return this.api.invokeRequest('GET', 'api/Accounts/' + accountUUID + '/Delete', ''    );
     }
 
+    getAccount(accountUUID) {
+        return this.api.invokeRequest('GET', 'api/AccountsBy/' + accountUUID, ''    );
+    }
+
+    getAccountCategories() {
+        return this.api.invokeRequest('GET', 'api/Accounts/Categories' );
+    }
+
     // NOTE: This only gets the accounts the user is a member of.
     //
     getAccounts(filter?: Filter) {
-        return this.api.invokeRequest('POST', 'api/Accounts' , JSON.stringify(filter)     );
+        return this.api.invokeRequest('POST', 'api/Accounts' , filter   );
     }
 
     getAllAccounts(filter?: Filter) {
         console.log('account.service.ts getAllAccounts filter:', filter);
-        return this.api.invokeRequest('POST', 'api/AllAccounts' , JSON.stringify(filter)   );
+        return this.api.invokeRequest('POST', 'api/AllAccounts' , filter  );
     }
 
-    getAccount(accountUUID) {
-        return this.api.invokeRequest('GET', 'api/AccountsBy/' + accountUUID, ''    );
+    getMembers(accountUUID) {
+        return this.api.invokeRequest('GET', 'api/Accounts/' + accountUUID + '/Members', ''    );
     }
 
 
@@ -57,23 +75,8 @@ export class AccountService  {
         return this.api.invokeRequest('GET', 'api/Accounts/' + accountUUID + '/NonMembers', ''    );
     }
 
-    getMembers(accountUUID) {
-        return this.api.invokeRequest('GET', 'api/Accounts/' + accountUUID + '/Members', ''    );
-    }
-
-    addUsersToAccount(accountUUID: string, users: Node[]) {
-
-        const newMembers = JSON.stringify(users);
-        return this.api.invokeRequest('POST', 'api/Accounts/' + accountUUID + '/Users/Add', newMembers);
-    }
-
-    addUserToAccount(accountUUID: string, userUUID: string) {
-        return this.api.invokeRequest('POST', 'api/Accounts/' + accountUUID + '/Users/' + userUUID + '/Add');
-    }
-
     removeUsersFromAccount(accountUUID: string, users: Node[]) {
-        const removeMembers = JSON.stringify(users);
-        return this.api.invokeRequest('POST', 'api/Accounts/' + accountUUID + '/Users/Remove', removeMembers);
+        return this.api.invokeRequest('POST', 'api/Accounts/' + accountUUID + '/Users/Remove', users);
     }
 
     setActiveAccount(accountUUID) {
@@ -82,18 +85,5 @@ export class AccountService  {
 
     updateAccount(account) {
        return this.api.invokeRequest('PATCH', 'api/Accounts/Update', account);
-    }
-
-    addFavorite(accountUUID: string):  Observable<Object> {
-        return this.api.invokeRequest('POST', 'api/Accounts/' + accountUUID + '/Favorite'  );
-    }
-
-    removeFavorite(accountUUID: string):  Observable<Object> {
-        return this.api.invokeRequest('DELETE', 'api/Accounts/' + accountUUID + '/Favorite'  );
-    }
-
-     // Returns reminders flagged as favorite
-     getFavorites(filter: Filter) {
-        return this.api.invokeRequest('POST', 'api/Accounts/Favorites', JSON.stringify(filter) );
     }
 }

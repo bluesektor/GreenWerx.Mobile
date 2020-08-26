@@ -1,0 +1,43 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Verify Member
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+        
+
+ 
+<ion-content padding style="padding:10px;">
+    <h6>Help the community by following these rules and guidlines.</h6>
+    <div style="padding:10px;" >
+    <ul>
+      <li style="list-style-type: disc;font-size: small;"><strong>ONLY</strong> verify people you have met <strong>IN PERSON!</strong></li>
+      <li style="list-style-type: disc;font-size: small;">You only have to meet them. Anything else is at your discretion
+                                      and is not endorsed or implied by  {{domain}}</li>
+    </ul>
+    <br/>
+    <p-checkbox label="You understand you may lose your verifications if the member you verify is fake or fruadulent." 
+      [(ngModel)]="agree" binary="agree"   >
+      </p-checkbox>            
+  </div>
+    
+    <div style="text-align: center; margin: auto;">
+    <ion-row  style="width:100%;align-content: center;" > 
+        <ion-col *ngIf="agree === true" > <!-- -->
+            <button  ion-button (click)="verify(  )" style="background-color:green !important;"  
+            class="white_btn" >
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            Verify</button>
+        </ion-col>
+        <ion-col>
+            <button ion-button (click)="dismiss()"   class="login_btn"  ion-button >
+              <ion-icon name="exit"></ion-icon>&nbsp;Cancel</button>
+        </ion-col>
+      </ion-row>
+    </div>
+
+
+
+</ion-content>
+        

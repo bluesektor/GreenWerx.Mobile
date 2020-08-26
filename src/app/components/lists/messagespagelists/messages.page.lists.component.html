@@ -1,0 +1,110 @@
+<ion-content padding>
+  
+  <ion-refresher #refresherRef [disabled]="false" (ionRefresh)="doRefresh($event)"  style="z-index: 999;" slot="fixed" >
+    <ion-refresher-content  pullingIcon="arrow-dropdown"
+    
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."  >
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list-header *ngIf="isLoading === true || (itemCount === 0 && isLoading === false)">
+      {{noDataMessage}}
+   </ion-list-header>
+
+   <div [ngSwitch]="viewType" >
+      <ion-virtual-scroll *ngSwitchCase="'EMAIL'" [items]="cache.messageItems"   > 
+  
+      <ion-item-sliding  #slidingItem *virtualItem="let item">
+        <ion-item button *ngIf="item.UUIDType !== 'blank'" (click)="viewMessage(item)" >
+
+            <!-- <img  [src]="item.Image" [alt]="item.Name"  
+            style="height:64px;border-radius: 5%;padding-right: 3px;" item-start> 
+            -->
+            <ion-label >
+                <div  style="float:right;">
+                    <div *ngIf="item.UUIDType !== 'blank'" style="border-left: 1px;float:right;vertical-align: top;font-size:small;" > 
+                        {{item.DateSent.split("T")[0] | date:'mediumDate' }}
+                    </div>
+                </div>
+                <h6   [class]="item.DateRead === null ? 'unreadEmail' : 'readEmail'"  style="vertical-align: top;font-weight:bold;">{{item.NameFrom}}</h6>  
+                <div   >
+                    <p> {{item.Subject}}</p>
+                </div>
+              </ion-label>
+        </ion-item>
+
+        <ion-item-options  >
+          <!--
+            <ion-item-option  *ngIf="sessionService.CurrentSession.UserUUID !== ''" 
+                              style="color:lightblue;"  
+                              (click)="addFavoriteItem(slidingItem, item)" >
+              Favorite</ion-item-option>
+        -->
+            <ion-item-option *ngIf="sessionService.CurrentSession.UserUUID !== ''" 
+                              class="dangerColor" 
+                              (click)="deleteMessage(slidingItem,item)"  >
+              Delete</ion-item-option>
+          </ion-item-options>
+      </ion-item-sliding> 
+
+      </ion-virtual-scroll> 
+
+      <ion-virtual-scroll *ngSwitchCase="'CHAT-TODO'" [items]="cache.messageItems"   > 
+  
+        <ion-item-sliding  #slidingItem *virtualItem="let item">
+          <ion-item *ngIf="item.UUIDType !== 'blank'"  >
+            <img  [src]="item.ImageThumb" [alt]="item.Name"  style="height:64px;border-radius: 5%;padding-right: 3px;" item-start>
+
+           
+            <ion-label>
+              <h6   style="vertical-align: top;">{{item.Name}}</h6>  
+              <h6   style="vertical-align: bottom;" > {{item.User?.Name}}</h6>
+             
+          
+              <button *ngIf="item.Status !== 'flagging'" style="height: 32px;" 
+                [ngStyle]="{ 'background-color' : getNsfwColor( item.NSFW ) }"
+                (click)="setNsfwFlag(item.UUID, '0')" >Safe
+              </button>
+              <div *ngIf="item.Status !== 'flagging'"  class="cell-block" style="float:right;" >
+                <button style="height: 32px;"
+                  [ngStyle]="{ 'background-color' : getNsfwColor( item.NSFW ) }"
+                  (click)="setNsfwFlag(item.UUID, '999')" >NSFW
+                </button>
+              </div>
+             </ion-label>
+           
+           </ion-item>
+  
+          <ion-item-options  >
+              <ion-item-option  *ngIf="segment === 'all'  &&  sessionService.CurrentSession.UserUUID !== ''" 
+                                style="color:lightblue;"  
+                                (click)="addFavoriteItem(slidingItem, item)" >
+                Favorite</ion-item-option>
+              <ion-item-option *ngIf="segment === 'favorites'  && sessionService.CurrentSession.UserUUID !== ''" 
+                                class="dangerColor" 
+                                (click)="removeFavoriteItem(slidingItem,item)"  >
+                Remove</ion-item-option>
+              
+            </ion-item-options>
+            <ion-item-options side="start"  *ngIf="item.Banned === true"   >
+              <button ion-button style="background-color:#f04141;color:white;"  
+                    (click)="removeUserBan(slidingItem,item)" >Unban</button> 
+            </ion-item-options>
+            <ion-item-options side="start"  *ngIf="item.LockedOut === true"   >
+              <button ion-button style="background-color:yellow;color:red;"  
+                    (click)="unlockUser(slidingItem,item)" >Unlock</button> 
+          </ion-item-options>
+        </ion-item-sliding> 
+  
+      </ion-virtual-scroll> 
+    </div>
+   
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreInViewPort($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  
+  </ion-content>

@@ -24,30 +24,6 @@ export class TutorialPage {
     console.log('tutorial.ts constructor');
   }
 
-  startApp() {
-    console.log('tutorial.ts startApp');
-    this.loading = true; // sanity check. todo create modal wait
-    this.router
-      .navigateByUrl('/tabs/home');
-     // .then(() => this.storage.set(LocalSettings.HasSeenTutorial, 'true'));
-  }
-
-  onSlideChangeStart(event) {
-    this.showSkip = !event.target.isEnd();
-  }
-
-  ionViewWillEnter() {
-    console.log('tutorial.ts ionViewWillEnter');
-
-   // this.storage.get(LocalSettings.HasSeenTutorial).then(res => {
-   //   if (res) {
-        this.router.navigateByUrl('/tabs/home');
-   //   }
-   // });
-
-    this.menu.enable(false);
-  }
-
   ionViewDidEnter() {
     console.log('tutorial.ts ionViewDidEnter');
   //  if (this.slides === null || this.slides === undefined) {
@@ -60,5 +36,29 @@ export class TutorialPage {
     console.log('tutorial.ts ionViewDidLeave');
     // enable the root left menu when leaving the tutorial page
     this.menu.enable(true);
+  }
+
+  ionViewWillEnter() {
+    console.log('tutorial.ts ionViewWillEnter');
+
+   // this.storage.get(LocalSettings.HasSeenTutorial).then(res => {
+   //   if (res) {
+        this.router.navigateByUrl('/tabs/store');
+   //   }
+   // });
+
+    this.menu.enable(false);
+  }
+
+  onSlideChangeStart(event) {
+    this.showSkip = !event.target.isEnd();
+  }
+
+  startApp() {
+    console.log('tutorial.ts startApp');
+    this.loading = true; // sanity check. todo create modal wait
+    this.router
+      .navigateByUrl('/tabs/store');
+     // .then(() => this.storage.set(LocalSettings.HasSeenTutorial, 'true'));
   }
 }

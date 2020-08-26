@@ -39,5 +39,10 @@ export class Role extends Node {
 
     Weight: number;
 
+    Category: string;
+
+    CategoryRoleName: string;
+
+    Selected: boolean; // NOTE: for ui purposes only
 }
 

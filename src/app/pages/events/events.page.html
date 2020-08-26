@@ -1,0 +1,89 @@
+<ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+        <ion-menu-button>
+        </ion-menu-button>
+      </ion-buttons>
+   
+        <img style="display: block;margin: auto;" src="../../../assets/img/header.dark.png" />
+        
+      <ion-buttons slot="end">
+        <ion-button (click)="presentFilter()">
+          <ion-icon slot="icon-only" name="options"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  
+    <ion-toolbar color="primary">
+        <ion-segment *ngIf="showSearch === false" id="btnAll" [(ngModel)]="segment" (ionChange)="segmentClicked()" >  
+            <ion-segment-button [ngStyle]="{ 'color' : ( segment ==='all')?  getColor(true) : getColor(false) }"
+                                value="all">
+               <div id="lblAll" class="cell-block">{{pluralType}} ({{itemCount}})</div>
+                      </ion-segment-button>
+            <ion-segment-button id="btnFavorites" [ngStyle]="{ 'color' : ( segment ==='favorites')?  getColor(true) : getColor(false) }"
+                                value="favorites"  >
+              
+              <div id="lblFavoriteProducts" class="cell-block">Favorites</div>
+            </ion-segment-button>
+          </ion-segment>
+      <ion-searchbar *ngIf="showSearch === true" class="cancel-icon-color" cancel-button-icon="close" (ionCancel)="toggleSearch($event)" 
+                  #txtSearchMenu    showCancelButton="always" [(ngModel)]="queryText" (ionChange)="onSearchData()" placeholder="Search">
+      </ion-searchbar>
+      <ion-buttons slot="end" >
+        <ion-button (click)="toggleSearch($event)" >
+          <ion-icon slot="icon-only"  name="search"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+ 
+<ion-content style="contain: size style;">
+ 
+    <app-events-page-lists  #lstItems  
+      (listUpdate)='listUpdated($event)'>
+    </app-events-page-lists>
+
+  <ion-fab    slot="fixed" vertical="bottom" horizontal="end" #fab>
+      <ion-fab-button #fabButton (click)="toggleList(fabButton, fabList)">
+        
+      <div [ngSwitch]="viewType" >
+          <span  *ngSwitchCase="'EVENT'" >
+            <ion-icon    src="/assets/icon/calendar.svg"   ></ion-icon>
+          </span>
+          <span *ngSwitchCase="'HOST'"  >
+           <ion-icon name="contacts"></ion-icon>
+          </span>
+          <span *ngSwitchDefault  >
+            <ion-icon    src="/assets/icon/calendar.svg"   ></ion-icon>
+          </span>
+      </div>
+      </ion-fab-button>
+      <ion-fab-list #fabList side="top">
+       
+        <ion-label *ngIf="viewType !== 'EVENT'" (click)="loadTypes('EVENT', fab)" 
+        style="right:25px;position:relative;padding: 10px;background-color:#3880ff;color:white; text-align: center; border-radius: 25px;line-height: 24px;" 
+          >Events</ion-label>
+        <ion-label *ngIf="viewType !== 'HOST'" (click)="loadTypes('HOST', fab)" 
+        style="right:25px;position:relative;padding: 10px;background-color:#3880ff;color:white; text-align: center; border-radius: 25px;line-height: 24px;" 
+          >Hosts</ion-label>
+      </ion-fab-list>
+  </ion-fab>
+ <!--
+  <ion-content style="display: block;margin: auto;"> 
+    <div  style="display: block;margin: auto;" >
+ 
+      <ion-input placeholder="Enter text and click echo button."  [(ngModel)]="echoText" name="echoText" type="text"  required></ion-input>
+      <br/>
+      <div *ngIf="loading === false" >  <button   (click)="onEcho()" class="white_btn"  expand="block">Echo</button></div>
+      <br/>
+      <div  *ngIf="loading === true" ><ion-spinner ></ion-spinner></div>
+      <br/>
+      <div *ngIf="status === 1" >
+        <label  [ngStyle]="{ 'color' : ( status === 0)?  'green' : 'green' }"    >Result:{{echoResult}}</label>
+      </div>
+      <div *ngIf="status === 2" >
+        <label  [ngStyle]="{ 'color' : ( status === 0)?  'red' : 'red' }"    >Result:{{echoResult}}</label>
+      </div>
+    </div>
+     -->
+</ion-content>

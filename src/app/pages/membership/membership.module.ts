@@ -5,13 +5,14 @@ import { IonicModule } from '@ionic/angular';
 
 import { ValidatePage } from './validate';
 import { MembershipRoutingModule } from './membership-routing.module';
-
+import {ChangePasswordModule} from '../password/change-password.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MembershipRoutingModule
+    MembershipRoutingModule,
+    ChangePasswordModule
   ],
   declarations: [
     ValidatePage,

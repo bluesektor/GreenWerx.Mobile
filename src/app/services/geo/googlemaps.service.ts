@@ -16,64 +16,14 @@ declare var google: any;
     mapLoaded: any;
     mapLoadedObserver: any;
     currentMarker: any;
-    apiKey  = 'YOURGOOGLEAPIKEY';
+    apiKey  = 'AIzaSyC6LsWGcWdG923U2z-ss72T3mZPMtkeQg0';
+
 
     constructor() { }
 
     init(mapElement: any ): Promise<any> {
       this.mapElement = mapElement;
       return this.loadGoogleMaps();
-    }
-
-    loadGoogleMaps(): Promise<any> {
-      console.log('googlemaps.service.ts loadGoogleMaps');
-      return new Promise((resolve) => {
-
-        if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
-
-          console.log('Google maps JavaScript needs to be loaded.');
-          // this.disableMap();
-          // if (this.connectivityService.status === ConnectionStatus.Online ) {
-
-            window['initMap'] = () => {
-              console.log('googlemaps.service window[initMap].');
-              this.initMap().then(() => {
-                console.log('googlemaps.service window[initMap] resolve true.');
-                resolve(true);
-              });
-
-              // this.enableMap();
-            };
-
-            const script = document.createElement('script');
-            script.id = 'googleMaps';
-
-            if (this.apiKey) {
-              console.log('googlemaps.service.ts load places library');
-              script.src = 'http://maps.googleapis.com/maps/api/js?key=' + this.apiKey + '&callback=initMap&libraries=places';
-            } else {
-              console.log('googlemaps.service.ts NO load places library');
-              script.src = 'http://maps.google.com/maps/api/js?callback=initMap';
-            }
-            console.log('googlemaps.service document.body.appendChild(script).');
-            document.body.appendChild(script);
-
-         // }
-        } else {
-
-         // if (this.connectivityService.status === ConnectionStatus.Online) {
-          console.log('googlemaps.service initMap.');
-            this.initMap();
-        //    this.enableMap();
-        //  } else {
-         //   this.disableMap();
-        //  }
-
-          resolve(true);
-
-        }
-         // this.addConnectivityListeners();
-      });
     }
 
     initMap(): Promise<any> {
@@ -102,7 +52,7 @@ declare var google: any;
       this creates an event that updates the map with the current position. i.e. tracks position.
       return new Promise((resolve) => {
 
-        navigator.geolocation.watchPosition((position) => {
+        navigator.geolocation.getCurrentPosition((position) => {
           console.log('event-edit.ts. getLocation position:', position);
 
           const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -118,6 +68,57 @@ declare var google: any;
         });
       });
       */
+    }
+
+    loadGoogleMaps(): Promise<any> {
+      console.log('googlemaps.service.ts loadGoogleMaps');
+      return new Promise((resolve) => {
+
+        if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+
+          console.log('Google maps JavaScript needs to be loaded.');
+          // this.disableMap();
+          // if (this.connectivityService.status === ConnectionStatus.Online ) {
+
+            window['initMap'] = () => {
+              console.log('googlemaps.service window[initMap].');
+              this.initMap().then(() => {
+                console.log('googlemaps.service window[initMap] resolve true.');
+                resolve(true);
+              });
+
+              // this.enableMap();
+            };
+
+            const script = document.createElement('script');
+            script.id = 'googleMaps';
+
+            if (this.apiKey) {
+              console.log('googlemaps.service.ts load places library');
+              script.src = 'https://maps.googleapis.com/maps/api/js?key=' + this.apiKey + '&callback=initMap&libraries=places';
+            } else {
+              console.log('googlemaps.service.ts NO load places library');
+              script.src = 'https://maps.google.com/maps/api/js?callback=initMap';
+            }
+            console.log('googlemaps.service document.body.appendChild(script).');
+            document.body.appendChild(script);
+
+         // }
+        } else {
+
+         // if (this.connectivityService.status === ConnectionStatus.Online) {
+          console.log('googlemaps.service initMap.');
+            this.initMap();
+        //    this.enableMap();
+        //  } else {
+         //   this.disableMap();
+        //  }
+
+          resolve(true);
+
+        }
+         // this.addConnectivityListeners();
+      });
     }
 
     parseLocation(address_components: any): EventLocation {

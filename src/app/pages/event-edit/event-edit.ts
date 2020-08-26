@@ -6,7 +6,7 @@ import { AccountService } from '../../services/user/account.service';
 import { Event, EventLocation } from '../../models/index';
 import { SessionService} from '../../services/session.service';
 import { ServiceResult } from '../../models/serviceresult';
-import {EventLoop} from '../../services/event.loop';
+import { Events } from '@ionic/angular';
 import {SelectItem} from 'primeng/primeng';
 import {GeoLocationComponent } from '../../components/geo/geolocation.component';
 import * as moment from 'moment';
@@ -16,7 +16,7 @@ import { DateTimeFunctions } from '../../common/date.time.functions';
 @Component({
   selector: 'page-event-edit',
   templateUrl: './event-edit.html',
-  styleUrls: ['./event-edit.scss'],
+  styleUrls: ['./event-edit.scss', '../../../assets/styles/primeng/primeng.min.css' ],
   encapsulation: ViewEncapsulation.None,
   providers: [EventService]
 })
@@ -44,7 +44,7 @@ export class EventEditPage implements OnInit  {
     private route: ActivatedRoute,
     private sessionService: SessionService,
     private accountService: AccountService,
-   public messages: EventLoop,
+   public messages: Events,
     public router: Router,
   ) {
     this.eventUUID =  this.route.snapshot.paramMap.get('uuid');
@@ -53,73 +53,6 @@ export class EventEditPage implements OnInit  {
     this.eventEndDate = moment(new Date()).toISOString();
     this.eventStartTime = moment(new Date()).local().toISOString();
     this.eventEndTime = moment(new Date()).local().toISOString();
-  }
-  ngOnInit() {
-
-    this.loadCategories();
-    this.loadAccounts();
-
-    if ( this.eventUUID === undefined || this.eventUUID === null || this.eventUUID === '') {
-      this.newEvent = true;
-      return;
-    }
-
-    this.loadEvent();
-  }
-
-  async loadEvent() {
-    await this.eventService.getEvent(this.eventUUID).subscribe((response) => {
-      if ( response.hasOwnProperty('Code') ) {
-        const data = response as ServiceResult;
-        if (data.Code !== 200) {
-          this.messages.publish('api:err', 500, data);
-          return;
-        }
-        this.event = data.Result as Event;
-        this.eventLocationUUID = this.event.EventLocationUUID;
-        console.log('event-edit.ts this.event 1:' , this.event);
-        console.log('event-edit.ts this.eventLocationUUID:' , this.eventLocationUUID);
-        this.eventStartDate = this.event.StartDate;
-        this.eventStartTime = this.event.StartTime;
-        this.eventEndDate = this.event.EndDate;
-        this.eventEndTime = this.event.EndTime;
-      } else { // pulled from local cache.
-        this.event = response as Event;
-        console.log('event-edit.ts cached this.event:' , this.event);
-      }
-      this.category = this.event.Category;
-   }, (err) => {
-      this.messages.publish('service:err', err);
-      return;
-   });
-  }
-
-  async loadCategories() {
-    this.categories = [];
-    console.log('event-edit.ts loadCategories');
-    if (this.eventService.Categories !== undefined && this.eventService.Categories.length > 0) {
-      for (let i = 0; i < this.eventService.Categories.length; i++) {
-        const tmp = this.eventService.Categories[i];
-        this.categories.push({ label: tmp, value: tmp });
-      }
-      console.log('event-edit.ts loadCategories cached this.categories:', this.categories);
-      return;
-    }
-   // this.loading = true;
-   await this.eventService.getEventCategories().subscribe((response) => {
-   //   this.loading = false;
-      const data = response as ServiceResult;
-      if (data.Code !== 200) {
-        this.messages.publish('api:err', 500, data);
-        return;
-      }
-      data.Result.forEach(name => {
-        this.eventService.Categories.push(name);
-        this.categories.push({ label: name, value: name });
-      });
-      console.log('event-edit.ts loadCategories this.categories:', this.categories);
-
-    });
   }
 
   async loadAccounts() {
@@ -156,7 +89,7 @@ export class EventEditPage implements OnInit  {
    //   this.loading = false;
       const data = response as ServiceResult;
       if (data.Code !== 200) {
-        this.messages.publish('api:err', 500, data);
+        this.messages.publish('api:err', data);
         return;
       }
       data.Result.forEach(account => {
@@ -166,6 +99,73 @@ export class EventEditPage implements OnInit  {
       this.hasAccountList = true;
       console.log('event-edit.ts loadAccounts this.accounts:', this.accounts);
     });
+  }
+
+  async loadCategories() {
+    this.categories = [];
+    console.log('event-edit.ts loadCategories');
+    if (this.eventService.Categories !== undefined && this.eventService.Categories.length > 0) {
+      for (let i = 0; i < this.eventService.Categories.length; i++) {
+        const tmp = this.eventService.Categories[i];
+        this.categories.push({ label: tmp, value: tmp });
+      }
+      console.log('event-edit.ts loadCategories cached this.categories:', this.categories);
+      return;
+    }
+   // this.loading = true;
+   await this.eventService.getEventCategories().subscribe((response) => {
+   //   this.loading = false;
+      const data = response as ServiceResult;
+      if (data.Code !== 200) {
+        this.messages.publish('api:err', data);
+        return;
+      }
+      data.Result.forEach(name => {
+        this.eventService.Categories.push(name);
+        this.categories.push({ label: name, value: name });
+      });
+      console.log('event-edit.ts loadCategories this.categories:', this.categories);
+
+    });
+  }
+
+  async loadEvent() {
+    await this.eventService.getEvent(this.eventUUID).subscribe((response) => {
+      if ( response.hasOwnProperty('Code') ) {
+        const data = response as ServiceResult;
+        if (data.Code !== 200) {
+          this.messages.publish('api:err', data);
+          return;
+        }
+        this.event = data.Result as Event;
+        this.eventLocationUUID = this.event.EventLocationUUID;
+        console.log('event-edit.ts this.event 1:' , this.event);
+        console.log('event-edit.ts this.eventLocationUUID:' , this.eventLocationUUID);
+        this.eventStartDate = this.event.StartDate;
+        this.eventStartTime = this.event.StartTime;
+        this.eventEndDate = this.event.EndDate;
+        this.eventEndTime = this.event.EndTime;
+      } else { // pulled from local cache.
+        this.event = response as Event;
+        console.log('event-edit.ts cached this.event:' , this.event);
+      }
+      this.category = this.event.Category;
+   }, (err) => {
+      this.messages.publish('service:err', err);
+      return;
+   });
+  }
+  ngOnInit() {
+
+    this.loadCategories();
+    this.loadAccounts();
+
+    if ( this.eventUUID === undefined || this.eventUUID === null || this.eventUUID === '') {
+      this.newEvent = true;
+      return;
+    }
+
+    this.loadEvent();
   }
 
 
@@ -205,7 +205,7 @@ export class EventEditPage implements OnInit  {
       //   this.loading = false;
          const data = response as ServiceResult;
          if (data.Code !== 200) {
-           this.messages.publish('api:err', 500, data);
+           this.messages.publish('api:err', data);
   //         this.geoLocation.savingEvent = false;
            return;
          }
@@ -228,13 +228,13 @@ export class EventEditPage implements OnInit  {
     this.geoLocation.savingEvent = false;
         const data = response as ServiceResult;
         if (data.Code !== 200) {
-          this.messages.publish('api:err', 500, data);
+          this.messages.publish('api:err', data);
           return;
         }
         this.geoLocation.location  = data.Result;
         if ( this.geoLocation.redirectAfterSave === true) {
           this.geoLocation.redirectAfterSave = false;
-          this.router.navigateByUrl('/tabs/home');
+          this.router.navigateByUrl('/tabs/events');
           return;
         }
         this.newEvent = true;

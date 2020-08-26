@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://dev.greenwerx.org/'
+  baseUrl: 'https://dev.greenwerx.org/',
+   domain: 'GreenWerx.org'
 };
 
 /*

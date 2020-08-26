@@ -5,6 +5,9 @@
 // also used as an entry point to import other Sass files to be included in the
 // output CSS.
 
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
 /* Core CSS required for Ionic components to work properly */
 @import "~@ionic/angular/css/core.css";
 
@@ -56,3 +59,649 @@
 .cell-block{
     display:inline-block;
 }
+
+ 
+.lblButton{
+    background-color:  var(--class-color-primary);
+    color:currentColor;
+     display: inline-block;
+     line-height: 2.2em;
+     padding: 0 0.62em;
+     border-radius: 0.25em;
+     width:100px;
+    text-align: center;
+     font-family: arial, sans-serif;
+     font-weight: 500;
+     text-transform: uppercase;
+     font-size: 1.2rem;
+  }
+   .lblButton:focus {
+       padding: 0  0.56em 0 0.68em;
+   }
+
+   .ui-widget, .ui-widget * {
+    box-sizing: border-box;
+}
+.ui-helper-hidden {
+    display: none !important;
+}
+.ui-helper-hidden-accessible {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+.ui-helper-hidden-accessible input,
+.ui-helper-hidden-accessible select {
+    transform: scale(0);
+}
+.ui-helper-reset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    line-height: 1.3;
+    text-decoration: none;
+    font-size: 100%;
+    list-style: none;
+}
+.ui-helper-clearfix::before,
+.ui-helper-clearfix::after {
+    content: "";
+    display: table;
+}
+.ui-helper-clearfix::after {
+    clear: both;
+}
+.ui-helper-clearfix {
+    zoom: 1;
+}
+.ui-helper-zfix {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    opacity: 0;
+    filter: Alpha(Opacity=0);
+}
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #898989;
+    opacity:  1;
+ }
+ ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #898989;
+    opacity:  1;
+ }
+ :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #898989;
+ }
+ ::-ms-input-placeholder { /* Microsoft Edge */
+    color: #898989;
+ }
+ .ui-placeholder {
+    color: #898989;
+ }
+ 
+ input[type="button"], 
+ input[type="submit"], 
+ input[type="reset"], 
+ input[type="file"]::-webkit-file-upload-button, 
+ button {
+     -moz-border-radius: 0;
+     -webkit-border-radius: 0;
+     border-radius: 0;
+ }
+   .ui-treetable {
+     position: relative;
+ }
+ 
+ .ui-treetable table {
+     border-collapse: collapse;
+     width: 100%;
+     table-layout: fixed;
+ }
+ 
+ .ui-treetable .ui-treetable-thead > tr > th,
+ .ui-treetable .ui-treetable-tbody > tr > td,
+ .ui-treetable .ui-treetable-tfoot > tr > td {
+     padding: .25em .5em;
+ }
+ 
+ .ui-treetable .ui-treetable-toggler {
+     cursor: pointer;
+     display: inline-block;
+     height: 1em;
+     position: relative;
+     top: 50%;
+     margin-top: -.5em;
+ }
+ 
+ .ui-treetable .ui-sortable-column {
+     cursor: pointer;
+ }
+ 
+ .ui-treetable p-treetablesorticon {
+     vertical-align: middle;
+ }
+ 
+ .ui-treetable-auto-layout > 
+ .ui-treetable-wrapper {
+     overflow-x: auto;
+ }
+ 
+ .ui-treetable-auto-layout > 
+ .ui-treetable-wrapper > table {
+     table-layout: auto;
+ }
+ 
+ .ui-treetable .ui-treetable-chkbox {
+     margin: 0 .25em;
+     vertical-align: middle;
+ }
+
+ ui-dropdown-panel .ui-dropdown-item {
+    font-weight: normal;
+    border: 0 none;
+    cursor: pointer;
+    margin: 1px 0;
+    padding: .125em .25em;
+    text-align: left;
+}
+.ui-widget * {
+    box-sizing: border-box;
+}
+.ui-helper-reset {
+    line-height: 1.3;
+    font-size: 100%;
+    list-style: none;
+}
+element {
+    min-width: 559px;
+    z-index: 1002;
+    top: 244.2px;
+    left: 1138.6px;
+    transform: translateY(0px);
+    opacity: 1;
+}
+.ui-dropdown-panel {
+    position: absolute;
+    height: auto;
+}
+
+.ui-dropdown-panel .ui-dropdown-items-wrapper {
+    overflow: auto;
+}
+ .ui-dropdown{display:inline-block;position:relative;cursor:pointer;vertical-align:middle}
+ .ui-dropdown .ui-dropdown-trigger{border-right:0;border-top:0;border-bottom:0;cursor:pointer;width:1.5em;height:100%;position:absolute;right:0;top:0;padding:0 .25em}
+ .ui-dropdown .ui-dropdown-trigger .fa{margin-top:.4em;margin-left:-.125em}
+ .ui-dropdown .ui-dropdown-label{display:block;border:0;white-space:nowrap;overflow:hidden;font-weight:normal;width:100%;padding-right:1.5em}
+ .ui-dropdown .ui-dropdown-item-empty,
+ .ui-dropdown .ui-dropdown-label-empty{text-indent:-9999px}
+ .ui-dropdown.ui-state-disabled .ui-dropdown-trigger,
+ .ui-dropdown.ui-state-disabled .ui-dropdown-label{cursor:default}
+ .ui-dropdown label.ui-dropdown-label{cursor:pointer}
+ .ui-dropdown input.ui-dropdown-label{cursor:default}.ui-dropdown .ui-dropdown-panel{min-width:100%}
+ .ui-dropdown-panel{position:absolute;height:auto}.ui-dropdown-panel .ui-dropdown-items-wrapper{overflow:auto}
+ .ui-dropdown-panel .ui-dropdown-item{font-weight:normal;border:0 none;cursor:pointer;margin:1px 0;padding:.125em .25em;text-align:left}
+ .ui-dropdown-panel .ui-dropdown-item-group{font-weight:bold}.ui-dropdown-panel .ui-dropdown-list{padding:.4em;border:0 none}
+ .ui-dropdown-panel .ui-dropdown-filter{width:100%;padding-right:1.5em}.ui-dropdown-panel 
+ .ui-dropdown-filter-container{position:relative;margin:0;padding:.4em;display:inline-block}.ui-dropdown-panel 
+ .ui-dropdown-filter-container .fa{position:absolute;top:.8em;right:1em}.ui-fluid .ui-dropdown{width:100%}
+ .ui-helper-reset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    line-height: 1.3;
+    text-decoration: none;
+    font-size: 100%;
+    list-style: none;
+}
+.ui-dropdown-panel .ui-dropdown-item:not(.ui-state-highlight):hover {
+    border-color: #c0c0c0;
+    background: #eeeeee;
+    color: #212121;
+}
+.ui-dropdown-panel .ui-dropdown-item {
+    font-weight: normal;
+    border: 0 none;
+    cursor: pointer;
+    margin: 1px 0;
+    padding: .125em .25em;
+    text-align: left;
+}
+
+.ui-multiselect {
+    display: inline-block;
+    position: relative;
+    width: auto;
+    cursor: pointer
+}
+
+.ui-multiselect .ui-multiselect-trigger {
+    border-right: 0;
+    border-top: 0;
+    border-bottom: 0;
+    cursor: pointer;
+    width: 1.5em;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0 .25em
+}
+
+.ui-multiselect .ui-multiselect-trigger .fa {
+    margin-top: .4em;
+    margin-left: -.125em
+}
+
+.ui-multiselect .ui-multiselect-label-container {
+    overflow: hidden
+}
+
+.ui-multiselect .ui-multiselect-label {
+    display: block;
+    padding: .25em 2em .25em .25em;
+    width: auto;
+    border: 0;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden
+}
+
+.ui-multiselect.ui-state-disabled .ui-multiselect-trigger,
+.ui-multiselect.ui-state-disabled .ui-multiselect-label {
+    cursor: auto
+}
+
+.ui-multiselect-panel {
+    padding: .2em;
+    position: absolute;
+    min-width: 10em
+}
+
+.ui-multiselect-panel .ui-multiselect-items-wrapper {
+    overflow: auto;
+    position: relative;
+    padding: .2em 0
+}
+
+.ui-multiselect-panel .ui-multiselect-list {
+    border: 0 none
+}
+
+.ui-multiselect-panel .ui-multiselect-item {
+    border: 0 none;
+    cursor: pointer;
+    font-weight: normal;
+    margin: 1px 0;
+    padding: .125em .25em;
+    text-align: left;
+    white-space: nowrap;
+    display: block;
+    position: relative
+}
+
+.ui-multiselect-panel .ui-multiselect-item .ui-chkbox {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.ui-multiselect-panel .ui-multiselect-item label {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.ui-multiselect-header {
+    margin-bottom: .3em;
+    padding: .25em;
+    position: relative;
+    text-align: left
+}
+
+.ui-multiselect-header .ui-chkbox {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer
+}
+
+.ui-multiselect-header .ui-multiselect-filter-container {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: 65%
+}
+
+.ui-multiselect-header .ui-multiselect-filter-container .fa {
+    position: absolute;
+    top: .25em;
+    left: .125em
+}
+
+.ui-multiselect-header .ui-inputtext {
+    padding: .125em .125em .125em 1.25em;
+    width: 100%
+}
+
+.ui-multiselect-header .ui-multiselect-close {
+    position: absolute;
+    right: .375em;
+    top: .375em;
+    display: block;
+    font-size: 1em;
+    border: 0 none
+}
+
+.ui-multiselect-header a.ui-multiselect-all,
+.ui-multiselect-header a.ui-multiselect-none {
+    float: left;
+    margin-right: 10px;
+    display: block
+}
+
+.ui-multiselect-header .ui-multiselect-close.ui-state-hover {
+    padding: 0
+}
+
+.ui-fluid .ui-multiselect {
+    width: 100%;
+    box-sizing: border-box
+}
+
+.ui-dropdown {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    vertical-align: middle
+}
+
+.ui-dropdown .ui-dropdown-trigger {
+    border-right: 0;
+    border-top: 0;
+    border-bottom: 0;
+    cursor: pointer;
+    width: 1.5em;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0 .25em
+}
+
+.ui-dropdown .ui-dropdown-trigger .fa {
+    margin-top: .4em;
+    margin-left: -.125em
+}
+
+.ui-dropdown .ui-dropdown-label {
+    display: block;
+    border: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: normal;
+    width: 100%;
+    padding-right: 1.5em
+}
+
+.ui-dropdown .ui-dropdown-item-empty,
+.ui-dropdown .ui-dropdown-label-empty {
+    text-indent: -9999px
+}
+
+.ui-dropdown.ui-state-disabled .ui-dropdown-trigger,
+.ui-dropdown.ui-state-disabled .ui-dropdown-label {
+    cursor: default
+}
+
+.ui-dropdown label.ui-dropdown-label {
+    cursor: pointer
+}
+
+.ui-dropdown input.ui-dropdown-label {
+    cursor: default
+}
+
+.ui-dropdown .ui-dropdown-panel {
+    min-width: 100%
+}
+
+.ui-dropdown-panel {
+    position: absolute;
+    height: auto
+}
+
+.ui-dropdown-panel .ui-dropdown-items-wrapper {
+    overflow: auto
+}
+
+.ui-dropdown-panel .ui-dropdown-item {
+    font-weight: normal;
+    border: 0 none;
+    cursor: pointer;
+    margin: 1px 0;
+    padding: .125em .25em;
+    text-align: left
+}
+
+.ui-dropdown-panel .ui-dropdown-item-group {
+    font-weight: bold
+}
+
+.ui-dropdown-panel .ui-dropdown-list {
+    padding: .4em;
+    border: 0 none
+}
+
+.ui-dropdown-panel .ui-dropdown-filter {
+    width: 100%;
+    padding-right: 1.5em
+}
+
+.ui-dropdown-panel .ui-dropdown-filter-container {
+    position: relative;
+    margin: 0;
+    padding: .4em;
+    display: inline-block
+}
+.ui-dropdown-panel .ui-dropdown-item {
+    font-weight: normal;
+    border: 0 none;
+    cursor: pointer;
+    margin: 1px 0;
+    padding: .125em .25em;
+    text-align: left;
+}
+.ui-widget-content .ui-state-highlight, .ui-state-highlight {
+    border-color: #156090;
+    background: 
+#186ba0;
+color:
+    #FFFFFF;
+}
+.ui-dropdown-panel .ui-dropdown-item {
+    font-weight: normal;
+    cursor: pointer;
+    text-align: left;
+}
+
+.ui-dropdown-panel .ui-dropdown-filter-container .fa {
+    position: absolute;
+    top: .8em;
+    right: 1em
+}
+
+.ui-fluid .ui-dropdown {
+    width: 100%
+}
+
+ /* Sections *
+ .ui-treetable-caption,
+ .ui-treetable-summary {
+     padding: .25em .5em;
+     text-align: center;
+     font-weight: bold;
+ }
+ 
+ .ui-treetable-caption {
+     border-bottom: 0 none;
+ }
+ 
+ .ui-treetable-summary {
+     border-top: 0 none;
+ }
+ 
+ /* Paginator *
+ .ui-treetable .ui-paginator-top {
+     border-bottom: 0 none;
+ }
+ 
+ .ui-treetable .ui-paginator-bottom {
+     border-top: 0 none;
+ }
+ 
+ /* Scrollable *
+ .ui-treetable-scrollable-wrapper {
+     position: relative;
+ }
+ .ui-treetable-scrollable-header,
+ .ui-treetable-scrollable-footer {
+     overflow: hidden;
+     border: 0 none;
+ }
+ 
+ .ui-treetable-scrollable-body {
+     overflow: auto;
+     position: relative;
+ }
+ 
+ .ui-treetable-scrollable-body > table > .ui-treetable-tbody > tr:first-child > td {
+     border-top: 0 none;
+ }
+ 
+ .ui-treetable-virtual-table {
+     position: absolute;
+ }
+ 
+ /* Frozen Columns *
+ .ui-treetable-frozen-view .ui-treetable-scrollable-body {
+     overflow: hidden;
+ }
+ 
+ .ui-treetable-frozen-view > .ui-treetable-scrollable-body > table > .ui-treetable-tbody > tr > td:last-child {
+     border-right: 0 none;
+ }
+ 
+ .ui-treetable-unfrozen-view {
+     position: absolute;
+     top: 0px;
+ }
+ 
+ /* Resizable *
+ .ui-treetable-resizable > .ui-treetable-wrapper {
+     overflow-x: auto;
+ }
+ 
+ .ui-treetable-resizable .ui-treetable-thead > tr > th,
+ .ui-treetable-resizable .ui-treetable-tfoot > tr > td,
+ .ui-treetable-resizable .ui-treetable-tbody > tr > td {
+     overflow: hidden;
+ }
+ 
+ .ui-treetable-resizable .ui-resizable-column {
+     background-clip: padding-box;
+     position: relative;
+ }
+ 
+ .ui-treetable-resizable-fit .ui-resizable-column:last-child .ui-column-resizer {
+     display: none;
+ }
+ 
+ .ui-treetable .ui-column-resizer {
+     display: block;
+     position: absolute !important;
+     top: 0;
+     right: 0;
+     margin: 0;
+     width: .5em;
+     height: 100%;
+     padding: 0px;
+     cursor:col-resize;
+     border: 1px solid transparent;
+ }
+ 
+ .ui-treetable .ui-column-resizer-helper {
+     width: 1px;
+     position: absolute;
+     z-index: 10;
+     display: none;
+ }
+ 
+ /* Reorder *
+ .ui-treetable-reorder-indicator-up,
+ .ui-treetable-reorder-indicator-down {
+     position: absolute;
+     display: none;
+ }
+ 
+ /* Responsive *
+ .ui-treetable-responsive .ui-treetable-tbody > tr > td .ui-column-title {
+     display: none;
+ }
+ 
+ @media screen and (max-width: 40em) {
+     .ui-treetable-responsive .ui-treetable-thead > tr > th,
+     .ui-treetable-responsive .ui-treetable-tfoot > tr > td {
+         display: none !important;
+     }
+ 
+     .ui-treetable-responsive .ui-treetable-tbody > tr > td {
+         text-align: left;
+         display: block;
+         border: 0 none;
+         width: 100% !important;
+         -webkit-box-sizing: border-box;
+         -moz-box-sizing: border-box;
+         box-sizing: border-box;
+         float: left;
+         clear: left;
+     }
+ 
+     .ui-treetable-responsive .ui-treetable-tbody > tr > td .ui-column-title {
+         padding: .4em;
+         min-width: 30%;
+         display: inline-block;
+         margin: -.4em 1em -.4em -.4em;
+         font-weight: bold;
+     }
+ }
+ 
+ /* Loader *
+ .ui-treetable-loading {
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)";
+     opacity: 0.1;
+     z-index: 1;
+ }
+ 
+ .ui-treetable-loading-content {
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     z-index: 2;
+     margin-top: -1em;
+     margin-left: -1em;
+ }
+ 
+ .ui-treetable .ui-treetable-loading-icon {
+     font-size: 2em;
+ }
+*/

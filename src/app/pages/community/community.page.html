@@ -1,0 +1,82 @@
+<ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <img style="display: block;margin: auto;" src="../../../assets/img/header.dark.png" />
+      <ion-buttons slot="end">
+        <ion-button (click)="presentFilter()">
+          <ion-icon slot="icon-only" name="options"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  
+    <ion-toolbar color="primary">
+        <ion-segment *ngIf="showSearch === false" id="btnAll" [(ngModel)]="segment" (ionChange)="segmentClicked()">
+            <ion-segment-button [ngStyle]="{ 'color' : ( segment ==='all')?  getColor(true) : getColor(false) }"
+                                value="all">
+               <div id="lblSegementText" class="cell-block">{{pluralType}} ({{itemCount}})</div>
+                      </ion-segment-button>
+            <ion-segment-button id="btnFavorites" [ngStyle]="{ 'color' : ( segment ==='favorites')?  getColor(true) : getColor(false) }"
+                                value="favorites"  >
+              
+              <div id="lblFavorites" class="cell-block">Favorites</div>
+            </ion-segment-button>
+          </ion-segment>
+      <ion-searchbar *ngIf="showSearch === true" class="cancel-icon-color" cancel-button-icon="close" 
+      #txtSearchCommunity  (ionCancel)="toggleSearch($event)" showCancelButton="always" [(ngModel)]="queryText"
+           (ionChange)="onSearchData()" placeholder="Search">    </ion-searchbar>
+      <ion-buttons slot="end" >
+        <ion-button (click)="toggleSearch()" >
+          <ion-icon slot="icon-only"  name="search"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+  
+<ion-content>
+      
+  <app-community-lists #lstItems
+    (listUpdate)='listUpdated($event)'
+   ></app-community-lists>
+
+  <!-- data-desc="this attribute adds the label next to buttons" -->
+  <ion-fab    slot="fixed" vertical="bottom" horizontal="end" #fab>
+      <ion-fab-button #fabButton (click)="toggleList(fabButton, fabList)">
+      <div [ngSwitch]="viewType" >
+        <!-- ADMIN
+        <span *ngSwitchCase="'ATTRIBUTE'"  >
+          <ion-icon name="options"></ion-icon>
+        </span>
+        -->
+            <span *ngSwitchCase="'PROFILE'"  >
+              <ion-icon name="people"></ion-icon>
+            </span>
+            <span *ngSwitchCase="'POST'"  >
+                <ion-icon  style="height:22px;width:22px;" src="/assets/icon/posts.svg"  alt="community" ></ion-icon>
+            </span>
+          <span *ngSwitchDefault  >
+            <ion-icon name="people"></ion-icon>
+          </span>
+       </div>
+      </ion-fab-button>
+      <!--if they type isn't selected then show it in the popup -->
+      <ion-fab-list #fabList side="top">
+         <ion-label *ngIf="viewType !== 'PROFILE'" (click)="loadTypes('PROFILE', fab)" 
+            style="cursor: pointer;right: 25px;position:fixed;padding: 10px;background-color:#3880ff;color:white;  text-align: center; border-radius: 25px;line-height: 24px;" 
+               >Profiles</ion-label>
+        <ion-label *ngIf="viewType !== 'POST'" (click)="loadTypes('POST', fab)" 
+            style="cursor: pointer;right:25px;position:relative;padding: 10px;background-color:#3880ff;color:white; text-align: center; border-radius: 25px;line-height: 24px;" 
+              >Posts</ion-label>
+
+        
+      </ion-fab-list>
+      <ion-fab-list side="start">
+          <ion-label *ngIf="viewType === 'POST' && sessionService.CurrentSession.UserUUID !== ''" (click)="newPost()" 
+              style="cursor: pointer;padding: 10px;background-color:#3880ff;color:white; text-align: center; border-radius: 25px;"     
+                >Post</ion-label>
+      </ion-fab-list>
+</ion-fab>
+        
+</ion-content>
+    

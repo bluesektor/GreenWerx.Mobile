@@ -1,6 +1,12 @@
 
  .green-black-theme{
  
+
+
+  .dangerColor {
+    color: red;
+    text-align: left;
+  }
     // --ion-color-success: ${success};
     // --ion-color-success-rgb: 16,220,96;
     // --ion-color-success-contrast: ${contrast(success)};
@@ -15,17 +21,17 @@
     // --ion-color-warning-tint: ${Color(warning).lighten(tintRatio)};
  
 $colors: (
-  primary:    (base: #6ea94c, contrast:#000),
+  primary:    (base: #76A94C, contrast:#000),
   secondary:  (base: #007ACC, contrast: #000),
   danger:     #f43e00,
   light:      (base:#bdc3c7, contrast:#000),
-  dark:       (base:#d35400, contrast:#000),
+  dark:       (base:#3880ff, contrast:#000),
   alert:      #F39C12,
   
 ) !default;
---class-color-primary: #6ea94c; //: var(--class-color-primary);
+--class-color-primary: #76A94C; //: var(--class-color-primary);
 // outer-content
---ion-color-primary: #6ea94c; 
+--ion-color-primary: #76A94C; 
 --ion-color-primary-rgb: 110, 169, 76; //110, 169, 76
 --ion-color-primary-contrast: #000000;
 --ion-color-primary-contrast-rgb: 0,0,0;
@@ -39,7 +45,7 @@ $colors: (
 // --ion-color-secondary-shade:  ${Color(secondary).darken(shadeRatio)};
 // --ion-color-secondary-tint: ${Color(secondary).lighten(tintRatio)};
 
---ion-color-dark: #d35400;
+--ion-color-dark: #3880ff;
 --ion-color-dark-rgb: 211, 84, 0;
 --ion-color-dark-contrast:  #000000;
 --ion-color-dark-contrast-rgb: 0,0,0;
@@ -61,7 +67,7 @@ $colors: (
  // --ion-color-danger-tint: ${Color(danger).lighten(tintRatio)};
 
 
-$--ion-color-base:  #d35400;
+$--ion-color-base:  #3880ff;
 --ion-color-contrast: #000;
 
 $background-color:           #363232 !default;
@@ -70,8 +76,8 @@ $background-color:           #363232 !default;
 $text-color:              #DADFE1 !default;
 --ion-text-color:         #DADFE1;
 
-$link-color:                color($colors, primary) !default;
---ion-link-color:         #6ea94c;
+// $link-color:  color($colors, primary) !default;
+--ion-link-color:         #76A94C;
 
 $subdued-text-color:      #666 !default;
 --ion-subdued-text-color: #666;
@@ -94,8 +100,8 @@ $toolbar-background:         #434343 !default;
 $toolbar-border-color:       #434343 !default;
 --ion-toolbar-border-color:       #434343;
 
-$toolbar-active-color:       $link-color !default;
---ion-toolbar-active-color:       #6ea94c;
+//$toolbar-active-color:       $link-color !default;
+--ion-toolbar-active-color:       #76A94C;
 $toolbar-inactive-color:     #8c8c8c !default;
 --ion-toolbar-inactive-color:     #8c8c8c;
 
@@ -104,7 +110,7 @@ $toolbar-inactive-color:     #8c8c8c !default;
 $tabs-background:            $toolbar-background !default;
 $tabs-border-color:          $toolbar-border-color !default;
 $tabs-tab-color-inactive:    #8c8c8c !default;
-$tabs-tab-color-active:      $link-color !default;
+//$tabs-tab-color-active:      $link-color !default;
 
 $list-text-color:            $text-color !default;
 $list-background-color:      #242424 !default;
@@ -133,7 +139,7 @@ $searchbar-md-input-search-icon-color: red;
 
 
 $toggle-background-color-off:#696969 !default;
-$toggle-background-color-on:#6ea94c !default;
+$toggle-background-color-on:#76A94C !default;
 
 
 $alert-background: $toolbar-background !default;

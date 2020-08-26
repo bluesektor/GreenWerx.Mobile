@@ -1,17 +1,20 @@
-import { Component, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { SessionService } from '../../services/session.service';
 import { UserService } from '../../services';
 import {LoginForm} from './loginform';
 import {  Session, ServiceResult } from '../../models/index';
-import {EventLoop} from '../../services/event.loop';
+import { Events } from '@ionic/angular';
 import { Api } from '../../services';
 import { ProfileService} from '../../services';
 import { Storage } from '@ionic/storage';
  import {LocalSettings} from '../../services/settings/local.settings';
 import {SendAccountInfoForm} from '../password/SendAccountInfoForm';
+import { ObjectFunctions } from 'src/app/common/object.functions';
+import {UiFunctions} from 'src/app/common/uifunctions';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'page-login',
@@ -20,51 +23,107 @@ import {SendAccountInfoForm} from '../password/SendAccountInfoForm';
   providers: [ProfileService],
   encapsulation: ViewEncapsulation.None
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   submitted = false;
   processing = false;
   login: LoginForm = new LoginForm();
   sessionLoaded = false;
   showMessage = false;
   message = '';
-  subscripotion: any;
+  returnUrl = '';
 
   constructor(
     private user: UserService,
-    private events: EventLoop,
+    private events: Events,
     private session: SessionService,
     public router: Router,
-    public messages: EventLoop,
+    private route: ActivatedRoute,
+    public messages: Events,
     public profleService: ProfileService,
+    private cookieService: CookieService,
     public storage: Storage ) {
-/*
+/* optimization_change
     this.events.subscribe('login.load.data', (data) => {
         // this fires after login and session is loaded.
-        console.log('login.ts event fired:', data);
-        console.log('login.ts event fired this.sessionLoaded :', this.sessionLoaded );
+        console.log('login.ts login.load.data event fired:', data);
+        console.log('login.ts  login.load.data event fired this.sessionLoaded :', this.sessionLoaded );
 
-        if (this.sessionLoaded === true ) {
-          this.router.navigateByUrl('/tabs/home');
+        if (this.returnUrl === '/' || ObjectFunctions.isNullOrWhitespace(this.returnUrl) ===  true) {
+          this.returnUrl = '/tabs/store';
         }
+
+        const tabId =   UiFunctions.getSelectedTabId('/tabs/store');
+        console.log('login.ts login.load.data event fired tabId:', tabId);
+        UiFunctions.UpdateColors(tabId);
+        console.log('login.ts  login.load.data event fired this.returnUrl :', this.returnUrl );
+        this.router.navigate([this.returnUrl]);
     });
-*/
-    this.subscripotion =  this.events.messageLoopSource$.subscribe(data => { //
-        let msg = data as ServiceResult;
-        let toast = null;
-        switch(msg.Type){
-          case 'login.load.data':
-            if (this.sessionLoaded === true ) {
-              this.router.navigateByUrl('/tabs/home');
-            }
-            break;
-        }
+    */
+  }
 
-        });
+  initializeSession(loginResult: any) {
+
+    console.log('LOGIN.TS initializeSession data.Result.AccountRoles:', loginResult.AccountRoles);
+    this.session.AccountRoles = loginResult.AccountRoles;
+    this.session.CurrentSession.IsPersistent = this.login.RememberMe;
+
+    Api.authToken = loginResult.Authorization;
+    this.cookieService.set( 'bearer', Api.authToken  );
+    console.log('LOGIN.TS initializeSession Api.authToken:', Api.authToken);
+
+
+    console.log('LOGIN.TS initializeSession LoadSession.  this.session :',  this.session);
+      this.session.getSession(Api.authToken).subscribe(sessionResponse => {
+        console.log('LOGIN.TS onLoging getSession. Api.authToken :', Api.authToken);
+        const sessionData = sessionResponse as ServiceResult;
+        console.log('LOGIN.TS initializeSession LoadSession.sessionData :', sessionData);
+        if (sessionData.Code !== 200) {
+          this.messages.publish('api:err', sessionData);
+            return false;
+        }
+        this.session.CurrentSession =  sessionData.Result as Session;
+        this.session.CurrentSession.IsPersistent = this.login.RememberMe;
+        this.session.CurrentSession.Profile = loginResult.Profile;
+        console.log('LOGIN.TS initializeSession this.session.CurrentSession.Profile :', this.session.CurrentSession.Profile );
+
+        this.sessionLoaded = true;
+        if ( this.login.RememberMe === true) {
+          this.storage.set(LocalSettings.SessionToken, Api.authToken);
+          this.storage.set(LocalSettings.UserName, this.login.UserName);
+          this.storage.set(LocalSettings.SessionData, this.session.CurrentSession);
+          this.storage.set(LocalSettings.HasLoggedIn, true);
+        }
+        this.messages.publish('login.load.data', 'session');
+
+    }, (err) => {
+      this.processing = false;
+      this.messages.publish('service:err', err);
+    });
+
+  }
+
+  ngOnInit() {
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+    this.events.subscribe('login.load.data', (data) => {
+      // this fires after login and session is loaded.
+      console.log('login.ts login.load.data event fired:', data);
+      console.log('login.ts  login.load.data event fired this.sessionLoaded :', this.sessionLoaded );
+
+      if (this.returnUrl === '/' || ObjectFunctions.isNullOrWhitespace(this.returnUrl) ===  true) {
+        this.returnUrl = '/tabs/store';
+      }
+
+      const tabId =   UiFunctions.getSelectedTabId('/tabs/store');
+      console.log('login.ts login.load.data event fired tabId:', tabId);
+      UiFunctions.UpdateColors(tabId);
+      console.log('login.ts  login.load.data event fired this.returnUrl :', this.returnUrl );
+      this.router.navigate([this.returnUrl]);
+  });
 }
-ngOnDestroy(){
-  this.subscripotion.unsubscribe();
-}
-  async onLogin(form: NgForm) {
+
+  onLogin(form: NgForm) {
     this.submitted = true;
     this.showMessage = false;
     this.message = '';
@@ -81,27 +140,24 @@ ngOnDestroy(){
       this.login.ClientType = 'mobile.app'; // this will persist the session on the server so they won't have to login all the time.
     }
 
-    await this.session.login(this.login).subscribe((response) => {
+     this.session.login(this.login).subscribe((response) => {
       console.log('LOGIN.TS onLogin response:', response);
 
+      // data fiels are set in the service in accountscontroller.Login at the bottom of the function
       const data = response as ServiceResult;
       this.processing = false;
        if (data.Code !== 200) {
           this.showMessage = true;
           this.message = data.Message;
-          this.messages.publish('api:err', 500, data);
+          this.messages.publish('api:err', data);
           return false;
       }
-      console.log('LOGIN.TS onLogin data.Result.UserRoles:', data.Result.UserRoles);
-      this.session.UserRoles = data.Result.UserRoles;
-      this.session.CurrentSession.IsPersistent = this.login.RememberMe;
 
-      Api.authToken = data.Result.Authorization;
-      console.log('LOGIN.TS onLogin Api.authToken:', Api.authToken);
-      this.profleService.CurrentProfile = data.Result.Profile;
-      console.log('LOGIN.TS  onLogin this.profleService.CurrentProfile:', this.profleService.CurrentProfile);
-      this.initializeSession();
+      // NOTE: see login.load.data above for redirect.
+      this.initializeSession(data.Result);
       this.messages.publish('user:login'); // events.ts is also listening so it can load favorites.
+      this.messages.publish('content:refresh'); // updates the store.page for now.
+
     });
   }
 
@@ -109,49 +165,5 @@ ngOnDestroy(){
     this.router.navigateByUrl('/signup');
   }
 
-  initializeSession() {
-    console.log('LOGIN.TS onLogin LoadSession.  this.session :',  this.session);
-      this.session.getSession(Api.authToken).subscribe(sessionResponse => {
-        console.log('LOGIN.TS onLoging getSession. Api.authToken :', Api.authToken);
-        const sessionData = sessionResponse as ServiceResult;
-        console.log('LOGIN.TS onLogin LoadSession.sessionData :', sessionData);
-        if (sessionData.Code !== 200) {
-          this.messages.publish('api:err', 500, sessionData);
-            return false;
-        }
-        this.session.CurrentSession =  sessionData.Result as Session;
-        this.session.CurrentSession.IsPersistent = this.login.RememberMe;
-        this.sessionLoaded = true;
-        if ( this.login.RememberMe === true) {
-          this.storage.set(LocalSettings.SessionToken, Api.authToken);
-          this.storage.set(LocalSettings.UserName, this.login.UserName);
-          this.storage.set(LocalSettings.SessionData, this.session.CurrentSession);
-          this.storage.set(LocalSettings.HasLoggedIn, true);
-        }
 
-        this.messages.publish('login.load.data',200,'session');
-    }, (err) => {
-      this.processing = false;
-      this.messages.publish('service:err', err);
-    });
-  }
-
-  async onResetPassword(form: NgForm, forgotPassword: boolean) {
-    this.processing = true;
-    const frmChange = new SendAccountInfoForm();
-    frmChange.ForgotPassword = forgotPassword; // if false send account info email, true send password reset link
-    frmChange.Email = this.login.UserName;
-    await this.user.sendUserInfo(frmChange).subscribe((response) => {
-      this.processing = false;
-          const data = response as ServiceResult;
-          if (data.Code !== 200) {
-            this.messages.publish('api:err', 500, data);
-            return false;
-          }
-          this.messages.publish('api:ok',200, 'Please check your email for instructions on updating your password.');
-         }, (err) => {
-          this.processing = false;
-          this.messages.publish('service:err', err);
-         });
-  }
 }

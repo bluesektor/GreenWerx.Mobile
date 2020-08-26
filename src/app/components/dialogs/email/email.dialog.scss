@@ -1,0 +1,38 @@
+@import '../../../../assets/styles/quill/quill.core.css';
+@import '../../../../assets/styles/quill/quill.snow.css';
+              
+
+// This stops the dropdown from being transparent.
+.ui-dropdown-panel .ui-dropdown-item {
+  background-color: white !important;
+  margin:0px !important;
+  }
+
+  
+#align-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  
+  div.editable {
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    color: #A3A8AC;
+}
+[contentEditable=true]:empty:not(:focus):before{
+  content:attr(data-text)
+  
+}
+
+strong {
+  font-weight: bold;
+}
+.email-dialog .modal-wrapper {
+  height: 90%;
+  top: 5%;
+  position: absolute; 
+  display: block;  
+}

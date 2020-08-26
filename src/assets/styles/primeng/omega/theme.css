@@ -497,6 +497,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 /* roboto-regular - latin */
 @font-face {
+  font-display: swap;
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
@@ -834,10 +835,10 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   /* W3C */ }
 
 .ui-menu .ui-menuitem .ui-menuitem-link:hover {
-  background-color: #a6a6a6;
+  background-color: #616060;
   color: #ffffff; }
 .ui-menu .ui-menuitem.ui-menuitem-active > .ui-menuitem-link {
-  background-color: #a6a6a6;
+  background-color: #616060;
   color: #ffffff; }
 
 /* PanelMenu */

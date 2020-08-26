@@ -1,7 +1,7 @@
 {
   "name": "GreenWerx",
-  "version": "0.0.1",
-  "author": "Open Source",
+  "version": "0.0.9",
+  "author": "Ionic Framework",
   "homepage": "https://greenwerx.org/",
   "scripts": {
     "ng": "ng",
@@ -10,8 +10,13 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "ionic:build": "ng build --prod --verbose",
-    "ionic:serve": "ng serve --prod --verbose --source-map=true"
+    "ionic:build": "ng build --output-hashing=all --prod --source-map --named-chunks && gzipper ./www ./gzipped",
+    "ionic:serve": "ng serve --prod --verbose",
+    "test-pwa": "npm run build && http-server dist -p 8080 --gzip --push-state",
+    "bundle-report": "ng build --prod --verbose --stats-json && webpack-bundle-analyzer www/stats.json",
+    "unused-report": "ng build --prod --verbose --stats-json && webpack --json | webpack-unused -s www",
+    "source-map": "ng build --prod --sourceMap",
+    "webpack-jarvis": "ng build --prod --verbose --stats-json && webpack --json --config ./webpack/webpack.jarvis.js -s www"
   },
   "private": true,
   "dependencies": {
@@ -63,6 +68,7 @@
     "ion-datetime-picker": "^0.5.2",
     "ionic": "^5.4.5",
     "ionic-angular": "^3.9.9",
+    "ionic-rating": "^2.0.0",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
@@ -70,7 +76,6 @@
     "ng-in-viewport": "^6.0.3",
     "ngx-autosize": "^1.6.4",
     "ngx-captcha": "^7.0.0",
-    "ngx-clipboard": "^13.0.0",
     "ngx-cookie-service": "^2.2.0",
     "ngx-gallery": "^5.10.0",
     "npm": "^6.12.1",
@@ -124,5 +129,10 @@
     "webpack-cli": "^3.3.10",
     "webpack-jarvis": "^0.3.2"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-geolocation": {}
+    }
+  }
 }

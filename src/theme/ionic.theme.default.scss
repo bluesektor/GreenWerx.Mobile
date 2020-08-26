@@ -1,4 +1,9 @@
 .ionic-theme-default{
+  
+  .dangerColor {
+    color: red;
+    text-align: left;
+  }
 // Ionic Theme
 // -------------------------------------------------------------------------------------------
 // This file contains the theme variables shared
@@ -59,6 +64,12 @@ $colors:  (
     contrast:         #fff,
     shade:            get-color-shade($danger),
     tint:             get-color-tint($danger)
+  ),
+  alert: (
+    base:             $alert,
+    contrast:         #fff,
+    shade:            get-color-shade($alert),
+    tint:             get-color-tint($alert)
   ),
   light: (
     base:             $light,

@@ -1,0 +1,86 @@
+/*
+button[ion-fab] {
+    overflow: visible;
+    position: relative;
+
+    ion-label {
+        position: absolute;
+        top: -8px;
+        right: 40px;
+
+        color: white;
+        background-color: rgba(0,0,0,0.7);
+        line-height: 24px;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+    contain: layout;
+}
+//Just add the pointer-events css and make the label clickable. button[ion-fab] { ion-label { pointer-events: auto; } } 
+
+
+ion-fab-button[data-desc] {
+  position: relative;
+}
+
+ion-fab-button[data-desc]::after {
+  position: absolute;
+  content: attr(data-desc);
+  z-index: 1;
+  right: 55px;
+  bottom: 4px;
+  background-color: var(--ion-color-dark);
+  padding: 9px;
+  border-radius: 15px;
+  color: white;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
+}
+
+ion-fab-button[data-desc] {
+  position: relative;
+}
+
+ion-fab-button[data-desc]::after {
+  position: absolute;
+  content: attr(data-desc);
+  z-index: 1;
+  right: 55px;
+  bottom: 4px;
+  background-color: var(--ion-color-primary);
+  padding: 9px;
+  border-radius: 15px;
+  color: white;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
+}
+*/
+
+ion-fab-button {
+  margin-left: 140px;
+  overflow: visible;
+  position: relative;
+}
+ion-fab-list {
+  ion-label {
+    position: relative;
+    top: 40px;
+    right: 25px;
+    color: white;
+  
+    background-color: rgba(0,0,0,0.7);
+    line-height: 24px;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+}
+ion-fab {
+  ion-badge {
+    position: relative;
+    top: 10px;
+    left: 140px;
+  }
+}
+
+.fabLabelButton{
+  background-color: aqua;
+  text-align: center;
+}

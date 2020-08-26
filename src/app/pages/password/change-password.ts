@@ -4,8 +4,7 @@ import { UserService } from '../../services';
 import { ServiceResult } from '../../models/serviceresult';
 import { NgForm } from '@angular/forms';
 import {ChangePasswordForm} from './changePassword';
-import {  ModalController } from '@ionic/angular';
-import {EventLoop} from '../../services/event.loop';
+import { Events, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'modal-changepassword',
@@ -19,17 +18,26 @@ export class ChangePasswordPage implements OnInit {
     loading = false;
     passwordForm: ChangePasswordForm = new ChangePasswordForm();
     error = '';
+    resetPassword = false;
+    confirmationCode = '';
 
     constructor(
         public modalCtrl: ModalController,
         private _userService: UserService,
-        public messages: EventLoop        ) { }
+        public messages: Events        ) { }
+
+      dismiss() {
+        this.error = '';
+        this.modalCtrl.dismiss();
+      }
 
     ngOnInit() {
         this.passwordForm.ResetPassword = false;
     }
 
     onSave(form: NgForm ) {
+       this.passwordForm.ResetPassword = this.resetPassword;
+       this.passwordForm.ConfirmationCode = this.confirmationCode;
         this.error = '';
         console.log('change-password.TS onSignup form', form);
         this.submitted = true;
@@ -40,13 +48,13 @@ export class ChangePasswordPage implements OnInit {
         this._userService.changePassword(this.passwordForm).subscribe((response) => {
           const data = response as ServiceResult;
           if (data.Code !== 200) {
-            this.messages.publish('api:err', 500, data);
+            this.messages.publish('api:err', data);
             this.error = data.Message;
             this.loading =  false;
             return false;
           }
 
-          this.messages.publish('api:ok',200, 'Password change successful.');
+          this.messages.publish('api:ok', 'Password change successful.');
           this.passwordForm = new ChangePasswordForm();
           this.dismiss();
          }, (err) => {
@@ -64,10 +72,5 @@ export class ChangePasswordPage implements OnInit {
           return false;
         }
         return true;
-      }
-
-      dismiss() {
-        this.error = '';
-        this.modalCtrl.dismiss();
       }
 }

@@ -1,8 +1,11 @@
 import { Node } from './node';
 
 export class  Event extends Node {
-
-    Body: string;
+    constructor() {
+        super();
+        this.Image = '/assets/img/blankprofile.png';
+    }
+    Description: string;
 
     Category: string;
 
@@ -16,6 +19,8 @@ export class  Event extends Node {
 
         // daily, bi-weekly, monthly..
     Frequency: string;
+
+    IsAffiliate: boolean;
 
     StartDate: Date;
 
@@ -34,4 +39,13 @@ export class  Event extends Node {
 
     FavoritedByAccountUUID: string;
 
+    Url: string;
+
+    Latitude: number;
+
+    Longitude: number;
+
+    Reference: string;
+
+    RefernceType: string;
 }

@@ -25,4 +25,28 @@ export class ConsoleColors {
     public static BgCyan = '\x1b[46m';
     public static BgWhite = '\x1b[47m';
     public static BgBlue() { return '\x1b[44m'; }
+
+    public static colorLog(message: string, color: string) {
+
+        color = color || 'black';
+// console.error(), console.warn(), console.info()
+        switch (color) {
+            case 'success':
+                 color = 'Green';
+                 break;
+            case 'info':
+                    color = 'DodgerBlue';
+                 break;
+            case 'error':
+                 color = 'Red';
+                 break;
+            case 'warning':
+                 color = 'Orange';
+                 break;
+            default:
+                 color = color;
+        }
+
+        console.log('%c' + message, 'color:' + color);
+    }
 }

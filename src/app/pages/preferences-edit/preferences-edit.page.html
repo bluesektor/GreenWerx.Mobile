@@ -1,0 +1,110 @@
+  <ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+    <ion-button class="button button-clear" (click)="dismiss()" >
+      <ion-icon name="arrow-back"></ion-icon>
+   </ion-button>
+</ion-buttons>
+<!--
+<ion-segment [(ngModel)]="segment" (ionChange)="segmentClicked()">
+  <ion-segment-button 
+  [ngStyle]="{ 'color' : ( segment ==='all')?  getColor(true) : getColor(false) }"
+    value="all">
+    {{pluralType}} ({{itemCount}})
+  </ion-segment-button>
+  <ion-segment-button 
+  
+    [ngStyle]="{ 'color' : ( segment ==='favorites')?  getColor(true) : getColor(false) }"
+   value="favorites"  >
+    Favorites
+  </ion-segment-button>
+</ion-segment>
+-->
+<ion-title>Edit Preferences</ion-title>
+</ion-toolbar>
+</ion-header>
+
+
+<ion-content padding-top text-center>
+    <ion-list>
+        <ion-item>
+          <ion-select id="cboBlockOptions" name="cboBlockOptions"
+              style="width:200px;align-content: center; display: block;margin: auto;"
+                placeholder="Select Option"
+                okText="Okay" cancelText="Dismiss"
+                [(ngModel)]="blockOption"
+                (ngModelChange)="onSelectBlockOption($event)" >
+              <ion-select-option  value="roles" >Categories</ion-select-option>
+              <ion-select-option  value="users" >Users</ion-select-option>
+          </ion-select>   
+        </ion-item>
+      </ion-list>
+
+<div *ngIf="blockOption === 'roles'" >
+  <h4>Block Category</h4>
+  <ion-list>
+    <ion-item>
+      <div *ngIf="loadingBlockedRoles === true" >  
+      <ion-spinner style="display: block;margin: auto;"  ></ion-spinner>
+      </div>
+
+      <div  style="width:200px;align-content: center; display: block;margin: auto;">
+        <p-table [value]="availableRoles"  id="availableRolesTable"   >
+          <ng-template pTemplate="header">
+              <tr><th></th><th></th></tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-role>
+              <tr>
+                  <td style="text-align: right;"> <p-checkbox label="" [(ngModel)]="role.Selected" binary="role.Selected" 
+                    (click)="onEditBlockedRole($event, role.UUID, role.Selected)"></p-checkbox>
+                  </td>
+                  <td style="text-align: left;">
+                    {{role.Name}}
+                  </td>
+              </tr>
+          </ng-template>
+        </p-table>
+        <br/>
+        <div *ngIf="showWait === true" >
+          <ion-spinner   style="display: block;margin: auto;"  ></ion-spinner>
+          </div>
+        <button  *ngIf="showWait === false" (click)="updateBlockedRoles()" class="white_btn"  expand="block">Save</button>
+      </div>
+  </ion-item>
+</ion-list>
+</div>
+
+  <br/><br/>
+ 
+<div  *ngIf="blockOption === 'users'" >
+  <h4>Blocked Users</h4>
+  <ion-list>
+    <ion-item>
+        
+      <div  style="width:200px;align-content: center; display: block;margin: auto;">
+          <p-table [value]="blockedUsers"  id="blockedUsersTable"   >
+            <ng-template pTemplate="header">
+                <tr><th></th><th></th></tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr>
+                    <td style="text-align: center;"> 
+                        <ion-item button >
+                          <label   >  
+                              {{item.Name}}
+                          </label>
+                        </ion-item>
+                    </td>
+                    <td>
+                        <button (click)="onUnblockUser(item)" class="white_btn"  expand="block">Unblock</button>
+                    </td>
+                  
+                </tr>
+            </ng-template>
+          </p-table>
+        </div>
+    </ion-item>
+  </ion-list>
+</div>
+
+</ion-content>

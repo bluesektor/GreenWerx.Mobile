@@ -25,4 +25,6 @@ export {Favorite} from './favorite';
 export {Role} from './role';
 export {DataImport} from './dataimport';
 export {Message } from './message';
+export {AffiliateLog} from './affiliatelog';
+export {StageData} from './stagedata';
 // export {Location } from './location';

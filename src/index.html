@@ -6,31 +6,64 @@
     <title>GreenWerx Mobile</title>
 
    <base href="/">
-    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=6.0">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="theme-color" content="#387ef5">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <link rel="icon" type="image/x-icon" href="assets/img/greenwerx.png">
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.png">
     <link rel="manifest" href="assets/manifest.json">
   <!-- add to homescreen for ios -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <link href="../assets/styles/primeng/omega/theme.css" rel="stylesheet">
-  <link href="../assets/styles/primeng/primeng.min.css" rel="stylesheet">
+
+  <!--
+ 
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="./assets/styles/fontawesome/css/fontawesome-all.min.css" rel="stylesheet"/>
 
+  -->
+  <style id="antiClickjack">
+    body {
+        display: none !important;
+    }
+
+   
+  </style>
+
+   <script type="text/javascript">
+    if (self === top) {
+        var antiClickjack = document.getElementById("antiClickjack");
+        antiClickjack.parentNode.removeChild(antiClickjack);
+    } else {
+        top.location = self.location;
+    }
     </script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-158718542-1');
+</script>
+
 </head>
 
 <body>
-    <app-root></app-root>
-  
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOURGOOGLEAPIKEY&libraries=places"></script>
+    <!--
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=APIKEY&libraries=places"></script>
+ 
+-->
+   
+    <app-root>Loading app....</app-root>
 </body>
+
+
+<script type="text/javascript"> 
+
+</script>
 
 </html>

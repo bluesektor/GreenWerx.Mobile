@@ -1,9 +1,10 @@
-import {Event } from './event';
-import { Account } from './account';
-export class  Favorite {
-    Event: Event = new Event();
-    Account: Account = new Account();
-    ReminderUUID: string;
+import {Node } from './node';
+
+export class  Favorite extends Node {
+
     CreatedBy: string;
     AccountUUID: string;
+    ItemUUID: string;
+    ItemType: string;
+    UserUUID: string;
 }

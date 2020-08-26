@@ -1,0 +1,49 @@
+<ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <img style="display: block;margin: auto;" src="../../../assets/img/header.dark.png" />
+      
+      <ion-buttons slot="end">
+        <ion-button  disabled="disabled" style="color:transparent;" (click)="presentFilter()">
+          <ion-icon slot="icon-only" name="options"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      
+    </ion-toolbar>
+    <ion-toolbar color="primary">
+        <ion-segment *ngIf="viewType === 'EMAIL' && showSearch === false" [(ngModel)]="segment" (ionChange)="segmentClicked()">
+            <ion-segment-button *ngIf="showSearch === false" [ngStyle]="{ 'color' : ( segment ==='inbox')?  getColor(true) : getColor(false) }"
+                                value="inbox"><div id="lblSegementInboxText" class="cell-block">
+                 Inbox</div>
+            </ion-segment-button>
+            <ion-segment-button [ngStyle]="{ 'color' : ( segment ==='sent')?  getColor(true) : getColor(false) }"
+                                value="sent"  >
+                                <div id="lblSegementSentText" class="cell-block">
+                  Sent</div>
+            </ion-segment-button>
+            <ion-segment-button [ngStyle]="{ 'color' : ( segment ==='trash')?  getColor(true) : getColor(false) }"
+                                value="trash"  >
+                  <div id="lblSegementTrashText" class="cell-block">
+                    Trash</div>
+            </ion-segment-button>
+          </ion-segment>
+    
+          <ion-segment *ngIf="viewType === 'CHAT' && showSearch === false" [(ngModel)]="segment" (ionChange)="segmentClicked()">
+          </ion-segment>
+
+          <ion-searchbar *ngIf="showSearch === true" class="cancel-icon-color" cancel-button-icon="close" (ionCancel)="toggleSearch($event)" showCancelButton="always" [(ngModel)]="queryText" (ionChange)="onSearchData()" placeholder="Search">    </ion-searchbar>
+          <ion-buttons slot="end" >
+            <ion-button (click)="toggleSearch($event)" >
+              <ion-icon slot="icon-only"  name="search"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+  <app-messages-lists #lstItems 
+  (listUpdate)='listUpdated($event)'
+  ></app-messages-lists>
+</ion-content>
+    

@@ -12,17 +12,20 @@ export class StagedDataService  {
     constructor( private api: Api ) {
     }
 
+    getStageDataWithMatches( type: string, filter: Filter) {
+        return this.api.invokeRequest('POST', 'api/StageData/' + type + '/MatchPublished' , filter, );
+    }
+
+    getDataTypes() {
+        return this.api.invokeRequest('GET', 'api/StagedData/DataTypes'  );
+    }
 
     getTestData() {
         return this.api.invokeRequest('GET', 'treelist_test.json'  );
     }
 
-    getStageDataWithMatches( type: string, filter: Filter) {
-        return this.api.invokeRequest('POST', 'api/StageData/' + type + '/MatchPublished' , JSON.stringify(filter), );
-    }
-
     publishStagedItems(items: any[], type: string) {
 
-        return this.api.invokeRequest('POST', 'api/StageData/Publish/' + type , JSON.stringify(items), );
+        return this.api.invokeRequest('POST', 'api/StageData/Publish/' + type , items, );
     }
 }

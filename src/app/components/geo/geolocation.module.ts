@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { GeoLocationComponent} from './geolocation.component';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import {DropdownModule} from 'primeng/dropdown';
+import { CheckboxModule } from 'primeng/primeng';
 
 @NgModule({
   declarations: [GeoLocationComponent],
@@ -14,7 +15,8 @@ import {DropdownModule} from 'primeng/dropdown';
     IonicModule,
     FormsModule,
     AutoCompleteModule,
-    DropdownModule
+    DropdownModule,
+    CheckboxModule
   ],
   exports: [GeoLocationComponent]
 })

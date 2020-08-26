@@ -21,7 +21,7 @@ export class LocalSettings {
   static readonly SessionData = 'SESSION_DATA'; // stores the session.ts
   static readonly Theme = 'THEME';
   static readonly ViewType = 'VIEW_TYPE'; // Used in home page for loading the data
-
+  static readonly ReferringMember = 'REFERRING_MEMBER';
 
   private SETTINGS_KEY = 'defaults';
 
@@ -33,6 +33,27 @@ export class LocalSettings {
   constructor(
     public storage: Storage
     ) {  }
+
+  _mergeDefaults(defaults: any) {
+    for (const k in defaults) {
+      if (!(k in this.settings)) {
+        this.settings[k] = defaults[k];
+      }
+    }
+    return this.setAll(this.settings);
+  }
+
+  getValue(key: string, defaultValue: string) {
+    console.log('setting.ts getValue key:', key);
+    return this.storage.get(this.SETTINGS_KEY)
+      .then(settings => {
+        console.log('setting.ts getValue settings:', settings);
+        if (settings === null) {
+          return defaultValue;
+        }
+        return settings[key];
+      });
+  }
 
   load( settingsKey ) {
     if (settingsKey === undefined || settingsKey === '' || settingsKey === '-') {
@@ -55,15 +76,6 @@ export class LocalSettings {
 
   }
 
-  _mergeDefaults(defaults: any) {
-    for (const k in defaults) {
-      if (!(k in this.settings)) {
-        this.settings[k] = defaults[k];
-      }
-    }
-    return this.setAll(this.settings);
-  }
-
   merge(settings: any) {
     for (const k in settings) {
       if (settings[k]) {
@@ -73,29 +85,17 @@ export class LocalSettings {
     return this.save();
   }
 
-  setValue(key: string, value: any) {
-    this.settings[key] = value;
-    return this.storage.set(this.SETTINGS_KEY, this.settings);
+  save() {
+    return this.setAll(this.settings);
   }
 
   setAll(value: any) {
    return this.storage.set(this.SETTINGS_KEY, value);
   }
 
-  getValue(key: string, defaultValue: string) {
-    console.log('setting.ts getValue key:', key);
-    return this.storage.get(this.SETTINGS_KEY)
-      .then(settings => {
-        console.log('setting.ts getValue settings:', settings);
-        if (settings === null) {
-          return defaultValue;
-        }
-        return settings[key];
-      });
-  }
-
-  save() {
-    return this.setAll(this.settings);
+  setValue(key: string, value: any) {
+    this.settings[key] = value;
+    return this.storage.set(this.SETTINGS_KEY, this.settings);
   }
 
   get allSettings() {

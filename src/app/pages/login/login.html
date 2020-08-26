@@ -10,7 +10,7 @@
 
 <ion-content>
   <div class="login-logo">
-    <img src="assets/img/greenwerx_header.png" alt="GreenWerx logo">
+    <img src="assets/img/header.dark.png" alt="GreenWerxlogo">
   </div>
 
   <ion-spinner *ngIf="processing === true"  style="display: block;margin: auto;"  ></ion-spinner>
@@ -19,54 +19,48 @@
   <form #loginForm="ngForm" novalidate  *ngIf="processing === false"  >
     <ion-list>
       <ion-item>
-        <ion-label position="stacked" color="primary">Username</ion-label>
-        <ion-input [(ngModel)]="login.UserName" name="username" type="text" #username="ngModel" spellcheck="false" autocapitalize="off"
+        <!-- <ion-label position="stacked" color="primary">Username</ion-label>-->
+        <ion-input placeholder="Username" [(ngModel)]="login.UserName" name="username" type="text" #username="ngModel" spellcheck="false" autocapitalize="off"
           required>
         </ion-input>
       </ion-item>
 
-      <ion-text color="danger">
+      <ion-text  class="dangerColor">
         <p [hidden]="username.valid || submitted == false" padding-left>
           Username is required
         </p>
       </ion-text>
 
       <ion-item>
-        <ion-label position="stacked" color="primary">Password</ion-label>
-        <ion-input [(ngModel)]="login.password" name="password" type="password" #password="ngModel" required>
+       <!-- <ion-label position="stacked" color="primary">Password</ion-label>-->
+        <ion-input placeholder="Password" [(ngModel)]="login.password" name="password" type="password" #password="ngModel" required>
         </ion-input>
       </ion-item>
 
-      <ion-text color="danger">
+      <ion-text  class="dangerColor">
         <p [hidden]="password.valid || submitted == false" padding-left>
           Password is required
         </p>
       </ion-text>
 
       <ion-item>
-        <ion-label color="primary" fixed>Remember Me</ion-label>
-      <ion-checkbox [(ngModel)]="login.RememberMe" name="RememberMe" ></ion-checkbox>
+        <ion-checkbox [(ngModel)]="login.RememberMe" name="RememberMe" ></ion-checkbox>
+         &nbsp; <ion-label color="primary" fixed>Stay Logged In</ion-label>
       </ion-item>
     </ion-list>
-
-    <ion-row responsive-sm>
-      <ion-col>
-        <ion-button (click)="onLogin(loginForm)" type="button" expand="block">Login</ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button (click)="onSignup()" color="light" expand="block">Signup</ion-button>
-      </ion-col>
-    </ion-row>
-
-    <br/>
-    <ion-row responsive-sm>
-      <ion-col>
-        <ion-button (click)="onResetPassword(loginForm, true)" type="button" expand="block">Reset</ion-button>
-      </ion-col>
-      <ion-col>
-          <ion-button (click)="onResetPassword(loginForm, false)" type="button" expand="block">Send Account Info</ion-button>
-      </ion-col>
-    </ion-row>
+  
+   
+    <div style="text-align: center; margin: auto;">
+        <ion-row  style="width:100%;align-content: center;" > 
+            <ion-col> 
+              <button (click)="onLogin(loginForm)"  class="login_btn" type="button" expand="block">Login</button>
+            </ion-col>
+            <ion-col>
+                <button (click)="onSignup()" class="white_btn"  expand="block">Signup</button>
+            </ion-col>
+          </ion-row>
+        </div>
+    
   </form>
 
 </ion-content>

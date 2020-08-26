@@ -8,17 +8,24 @@ import {_throw} from 'rxjs/observable/throw';
 import {Router} from '@angular/router';
 import {EmptyObservable} from 'rxjs/observable/EmptyObservable';
 import { catchError } from 'rxjs/operators';
+import {Api} from './services/api/api';
 
 @Injectable()
-export class HttpErrorInterceptor implements HttpInterceptor {
+export class AuthInterceptor implements HttpInterceptor {
     constructor(private router: Router) {
-        console.log('interceptor.ts constructor');
+        console.log('event******************************************************interceptor.ts constructor');
     }
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log('interceptor.ts intercept');
-        return next.handle(req)
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        request = request.clone({
+            setHeaders: {
+                Authorization: `Bearer ` + Api.authToken
+            }
+        });
+
+        return next.handle(request)
         .pipe( catchError(error => {
+            console.log('interceptor.ts intercept ERROR');
             if (error instanceof HttpErrorResponse && error.status === 404 ) {
                 this.router.navigateByUrl('/not-found', {replaceUrl: true});
             } else {
@@ -27,26 +34,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         }) );
 
 
-    /*     request =  this.http.get(url,
-            { headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + Api.authToken}}
-            )
-            .pipe(tap(_ =>
-                    console.log('api.ts get url:', url))
-                    // ,catchError(this.handleError(url))
-                    );
-
-
-        return next.handle(req)
-        .catch(error => {
-            if (error instanceof HttpErrorResponse && error.status === 404) {
-                this.router.navigateByUrl('/not-found', {replaceUrl: true});
-
-                return new EmptyObservable();
-            }
-            else
-                return _throw(error);
-        });
-
+    /*
 
 
        // original
@@ -67,6 +55,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
 export const HttpErrorInterceptorProvider = {
     provide: HTTP_INTERCEPTORS,
-    useClass: HttpErrorInterceptor,
+    useClass: AuthInterceptor,
     multi: true,
 };
+

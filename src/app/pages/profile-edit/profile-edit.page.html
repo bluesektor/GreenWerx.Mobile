@@ -1,0 +1,280 @@
+<!--<ion-header>
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+-->
+  <ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+    <ion-button class="button button-clear" (click)="dismiss()" >
+      <ion-icon name="arrow-back"></ion-icon>
+   </ion-button>
+</ion-buttons>
+<ion-title>Edit Profile</ion-title>
+</ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="isAuthorized === false" padding class="host-detail">
+  <h2>You are not authorized access. </h2>
+ 
+</ion-content>
+<ion-content  *ngIf="isAuthorized === true"  padding-top text-center>
+    <div *ngIf="showWait" style="width:100%; text-align: center;"> 
+      <ion-spinner   style="display: block;margin: auto;"  ></ion-spinner> </div>
+    <div *ngIf="!showWait">
+    <img *ngIf="selectedProfile.NSFW === 0" src="{{selectedProfile.Image  | getLargeImage}}" alt="Profile Picture" 
+          style="text-align: center;" name="profileImage">
+    <br/>
+    <button style=" text-align: center;padding: 4px 12px;font-size: 12px;background: #f0d264;border-radius: 50px;" 
+      (click)="showMainPicRules();">Profile Photo Rules</button>
+    
+    <!-- .color .yellow {}
+    <form role="form" (ngSubmit)="save()" id="ngFormselectedProfile"  >
+      -->
+      <ion-list>   <!--
+        <ion-item>
+            <label for="file-1" class="lblButton" style="width:99%;" >Update
+                <input name="imageUpload" type="file"  style="display:none;height: 0px;width:0px;background-color: transparent;text-align: right;color: transparent;"
+                  name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected"  
+                  (change)="uploadImageEvent($event, false)" />
+              </label>
+              <label *ngIf="hasCamera" (click)="getPicture()"  class="lblButton" >
+               <ion-icon name="camera" style="width:20px;height: 17px;" ></ion-icon>
+              </label> 
+        </ion-item>
+      -->
+       <ion-item>
+          <ion-input placeholder="Title"
+                    [(ngModel)]="selectedProfile.Name"
+                    name="Title" type="text" class="input-sm form-control">
+          </ion-input>
+       </ion-item>
+       <!--
+       <ion-item>
+          <ion-button  type="button"  color="light" (click)="editLocation()">Update</ion-button> &nbsp;
+            <ion-input placeholder="Location"
+                      [(ngModel)]="locationName"
+                      name="Location" type="text" class="input-sm form-control">
+        </ion-input>
+        </ion-item>
+
+        (keyup)="resizeTextarea($event)"
+        -->
+        <ion-item>
+          <ion-textarea name="txtDescription"          id="txtDescription"
+            autosize 
+            placeholder="About Us"  
+            [(ngModel)]="selectedProfile.Description" >
+          </ion-textarea>
+        </ion-item>
+        <ion-item>
+            <ion-textarea name="LookingFor" style="min-height: 300px;"  
+              placeholder="LookingFor"  
+              autosize 
+              [(ngModel)]="selectedProfile.LookingFor" >
+            </ion-textarea>
+          </ion-item>
+       
+      </ion-list>
+      <ion-list>
+          <ion-item  lines="none" >
+                <ion-input placeholder="Location"
+                          [(ngModel)]="locationName"
+                           name="location" type="text" class="input-sm form-control">
+            </ion-input>
+          </ion-item>
+          <!--
+          <ion-item>
+              <label>Lat:{{lat}}</label>
+          </ion-item>
+          <ion-item>
+              <label>Lon:{{lon}}</label>
+          </ion-item>
+          -->
+          <ion-item style="align-content: center;margin-bottom: 15px;"  >
+              <button  type="button" class="login_btn"    (click)="editLocation()">Location</button>
+              
+          </ion-item>
+      </ion-list>
+   <!--  
+      <ion-list>
+          <ion-item>
+                <p-dropdown    [options]="relationships"  name="relationship" color="light"  
+                        appendTo="body" style="width:100% !important;"
+                (onChange)="onCboChangeRelationship($event )"
+                placeholder="Select Status"
+                [style]="{  'width':'100% !important','z-index':'900 !important', 'position':'relative !important' }"
+                [(ngModel)]="selectedProfile.RelationshipStatus"  required></p-dropdown>
+          </ion-item>
+      </ion-list>
+    -->
+      <ion-list>
+        <ion-grid fixed>
+              <ion-row align-items-stretch>
+               
+                <ion-col size="12" size-md="6" *ngFor="let profileMember of selectedProfile.Members; let i = index">
+                   <ion-card class="speaker-card">
+                    <ion-card-header>
+                        <!--  <ion-item detail="false" lines="none"  (click)="goToMemberDetail(profileMember)"> -->
+                       <ion-item detail="false" lines="none" >
+                         <!--<ion-avatar slot="start">
+                                <img [src]="profileMember.Image  | getLargeImage" alt="profile pic">
+                              </ion-avatar>-->
+                       
+                        <ion-input style="text-align: left;width:100%;" type="text"  placeholder="Name" 
+                               name="name" [(ngModel)]="selectedProfile.Members[i].Name"   ></ion-input>
+                      </ion-item>
+                    </ion-card-header>
+
+                    <ion-card-content>
+                      <ion-list>
+                          <ion-item>
+                            <label>Height</label>
+                            <ion-select id="cboSupportOptions" name="cboSupportOptions" 
+                            placeholder="Select Height"
+                            okText="Okay" cancelText="Dismiss"
+                            [(ngModel)]="selectedProfile.Members[i].Height"
+                            (ngModelChange)="onCboChangeHeight($event, i)" >
+                          <ion-select-option   *ngFor="let inch of inches"  [value]="inch.value"    >{{inch.label}}</ion-select-option>
+                        </ion-select> 
+                        </ion-item>
+                          <ion-item>
+                              <label>Weight</label> 
+                              <ion-input style="text-align: right;" myNumberOnly type="text"   
+                                            name="weight" [(ngModel)]="selectedProfile.Members[i].Weight"   ></ion-input>
+                          </ion-item>
+                        <ion-item>
+                         <ion-label  >DOB</ion-label>
+                         <ion-datetime displayFormat="MMM DD YYYY"  name="dob{{profileMember.UUID}}" #dob="ngModel" [(ngModel)]="selectedProfile.Members[i].DOB"></ion-datetime>
+                        </ion-item>
+                        <ion-item>
+                            <label>Orientation</label>  &nbsp;&nbsp; <!--todo style right -->
+                            
+                              <p-dropdown [options]="orientations"   name="orientation-" appendTo="body" style="width:100% !important;"
+                              (onChange)="onCboChangeOrientation($event)"
+                              placeholder="Select Orientation"
+                              [style]="{  'width':'100% !important','z-index':'900 !important', 'position':'relative !important' }"
+                              [(ngModel)]="profileMember.Orientation"  ></p-dropdown>
+                           
+                        </ion-item>
+                        <ion-item>
+                            <label>Gender</label>  &nbsp;&nbsp; <!--todo style right -->
+                            
+                              <p-dropdown [options]="genders"   name="gender-" appendTo="body" style="width:100% !important;"
+                              (onChange)="onCboChangeGender($event, i )"
+                              placeholder="Select Gender"
+                              [style]="{  'width':'100% !important','z-index':'900 !important', 'position':'relative !important' }"
+                              [(ngModel)]="profileMember.Gender"  ></p-dropdown>
+                           
+                        </ion-item>
+                       
+                      </ion-list>
+                   
+                      <ion-button style="display: block; margin: 0 auto;"  type="button" color="light" expand="block"
+                          (click)="deleteProfileMember(profileMember.UUID)" label="Delete">
+                          <ion-icon style="color:red;" name="trash"></ion-icon>
+                  
+                      </ion-button>
+                    </ion-card-content>
+
+ <!--   [(ngModel)]="selectedProfile.Members[i].Weight"   [(ngModel)]="selectedProfile.Members[i].Height"
+                    <ion-row no-padding justify-content-center>
+                      <ion-col text-left size="4">
+                        <ion-button fill="clear" size="small" color="primary" (click)="goToSpeakerTwitter(speaker)">
+                          <ion-icon name="logo-twitter" slot="start"></ion-icon>
+                          Tweet
+                        </ion-button>
+                      </ion-col>
+                      <ion-col text-center size="4">
+                        <ion-button fill="clear" size="small" color="primary" (click)="openSpeakerShare(speaker)">
+                          <ion-icon name="share-alt" slot="start"></ion-icon>
+                          Share
+                        </ion-button>
+                      </ion-col>
+                      <ion-col text-right size="4">
+                        <ion-button fill="clear" size="small" color="primary" (click)="openContact(speaker)">
+                          <ion-icon name="chatboxes" slot="start"></ion-icon>
+                          Contact
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                     -->
+
+                  </ion-card>
+                </ion-col>
+               
+              </ion-row>
+        </ion-grid>
+        <button (click)="showProfileMemberDialog()" type="button"  class="login_btn" expand="block">Add Member</button>  
+      </ion-list>
+      <!--
+    </form>-->
+    <br/><br/>
+    <h6>Gallery</h6>
+    
+    <label *ngIf="images.length === 0" >No images.</label>
+   
+    <ion-list  *ngIf="images.length > 0"  >
+    <ion-item-sliding #slidingItem  *ngFor="let image of images"  style="border-width: 3px;border-color:yellow;"
+     
+     [ngStyle]="{  'border-color': (image.Image === selectedProfile.Image )? 'green' : 'gray' }">  
+      <ion-item button   style="border-width: 3px;border-color:yellow;" >
+          <img  
+              [src]="image.ImageThumb" 
+              [alt]="image.Name"  
+              style="height:64px;border-radius: 5%;padding-right: 3px;display:inline-block;" item-start>
+          <ion-input style="display:inline-block;" placeholder="Description" [(ngModel)]="image.Name" name="AttributeName" type="text" >
+          </ion-input>
+          <!--
+          <ion-button style="margin: 0 auto;width:32px;display:inline-block;"  type="button" color="light" 
+              (click)="makeProfileImage(image.UUID)" label="Profile">
+              <ion-icon name="image"  [ngStyle]="{ 'color': (image.Image === selectedProfile.Image )? 'green' : 'gray' }"    ></ion-icon>
+          </ion-button>   
+          -->
+      </ion-item>
+      <!--  <ion-item-options side="start"  *ngIf="image.NSFW === 0 && image.Image !== selectedProfile.Image"   >-->
+          <ion-item-options side="start"  *ngIf="image.Image !== selectedProfile.Image"   >
+            <button ion-button style="background-color:lightsteelblue;color:black;"  
+              (click)="makeProfileImage(image.UUID)" >Make Primary</button> 
+          </ion-item-options>
+          <ion-item-options  >
+              <ion-item-option 
+                class="dangerColor" (click)="deleteImage(image.UUID)"  >
+                Delete
+              </ion-item-option>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+
+    <label for="file-2" style="cursor: pointer;width:20px;height: 17px;margin:13px 10px;">
+      
+        <ion-icon style="width:32px;height: 32px;"  name="folder-open"></ion-icon>
+        <input  type="file"  style="display:none;height: 0px;width:0px;background-color: transparent;text-align: right;color: transparent;" 
+          name="file-2[]" id="file-2" class="inputfile inputfile-2" data-multiple-caption="{count} files selected" 
+          multiple (change)="queueImage($event)" />
+      </label> 
+      <br/>
+      <label>Upload Image(s)</label>
+    <!-- todo load images from attributes table  filterBy="brand" filterPlaceholder="Filter by brand"         filter="filter"  
+    <p-orderList [value]="images" [listStyle]="{'height':'250px'}" header="Gallery" dragdrop="true">
+      <ng-template let-galleryFile pTemplate="item">
+          <div class="ui-helper-clearfix">
+              <img src="{{galleryFile.Image}}" style="display:inline-block;margin:2px 0 2px 2px" >
+            <div style="font-size:14px;float:right;margin:15px 5px 0 0">{{galleryFile.Name}}</div>
+          </div>
+      </ng-template>
+    </p-orderList>
+    -->
+<!--<p-galleria [images]="images" panelWidth="400" panelHeight="320"            [autoPlay]="false" [showCaption]="true"></p-galleria>-->
+    <br/>       <br/>   <br/>
+    <ion-list *ngIf="!showWait" >
+        <button (click)="save()" type="button"  class="login_btn" expand="block">Save</button>
+        <br/><br/>
+        <button (click)="dismiss()" type="button" class="white_btn" expand="block">Close</button>
+        <!--<button ion-button (click)="create()"   color="light" block>Clone</button> -->
+    </ion-list>
+
+  </div>
+
+</ion-content>

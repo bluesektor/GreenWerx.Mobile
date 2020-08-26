@@ -1,0 +1,36 @@
+ I. add this for switching to chat and composing messages..
+ <ion-fab    slot="fixed" vertical="bottom" horizontal="end" #fab>
+          <ion-fab-button #fabButton (click)="toggleList(fabButton, fabList)">
+          <div [ngSwitch]="viewType" >
+            <!-- 
+            <span *ngSwitchCase="'CHAT'"  >
+                <i id="icoChat" class="fas fa-comment-dots" ></i>
+              </span>               
+            -->
+            
+              <span *ngSwitchCase="'EMAIL'"  >
+                  <ion-icon name="mail"></ion-icon><!-- TODO if new email show fas fa-envelope-open-text -->
+                </span>
+              <span *ngSwitchDefault  >
+               <ion-icon name="mail"></ion-icon>
+              </span>
+           </div>
+          </ion-fab-button>
+          <!--if they type isn't selected then show it in the popup -->
+          <ion-fab-list #fabList side="top">
+              <ion-fab-button *ngIf="viewType !== 'EMAIL'"   (click)="loadTypes('EMAIL', fab)">
+                  <span><ion-icon name="mail"></ion-icon></span>
+              </ion-fab-button>
+              <!-- 
+                  <ion-fab-button  *ngIf="viewType !== 'CHAT'"   (click)="loadTypes('CHAT', fab)" >
+                <span ><ion-icon name="chatboxes"></ion-icon></span>
+                </ion-fab-button>
+                -->
+          </ion-fab-list>
+          <!--this extends sideways. make this compose new email. mark all as read.. 
+              delete selected => shows check boxes       
+          <ion-fab-list side="start"> 
+              <ion-fab-button><ion-icon name="logo-instagram"></ion-icon></ion-fab-button>
+          </ion-fab-list>-->
+  </ion-fab>
+      

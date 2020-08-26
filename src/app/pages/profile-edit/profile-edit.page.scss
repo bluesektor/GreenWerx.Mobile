@@ -1,0 +1,49 @@
+textarea.text-input {
+  display: block;
+  min-height: 400px;
+  } 
+  
+  img {
+    max-width: 140px;
+    border-radius: 50%;
+  }
+
+  .js .inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+  .spinner svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  
+  .host-detail p {
+    color: #60646B;
+  }
+ 
+  .ui-panel-images {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ui-galleria-panel {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .ui-dropdown    {
+    width:100% !important;
+  }
+  
+// This stops the dropdown from being transparent.
+.ui-dropdown-panel .ui-dropdown-item {
+  background-color: white !important;
+  margin:0px !important;
+  }
+
+ 

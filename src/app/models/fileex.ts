@@ -19,5 +19,7 @@ export class FileEx {
 
     data: Blob;
 
+    NSFW: number;
+
 }
 

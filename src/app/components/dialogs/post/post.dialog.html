@@ -1,0 +1,121 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>
+        New Post
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+        
+
+ 
+<ion-content>
+  <ion-list>
+    <ion-item>
+        <ion-input placeholder="Title" [(ngModel)]="post.Name" type="text"   ></ion-input>
+    </ion-item>
+    <ion-item style="width: 100%;">
+      <!--
+      <p-dropdown  [options]="postFilterItems"  name="postFilterItems" appendTo="body"
+        style="width:100%;background-color: white;"
+          (onChange)="onCboChangeCategory($event )"
+          placeholder="Category"
+          [style]="{  'width':'100%',  'z-index':'900 !important', 'position':'relative  !important' }"
+          [(ngModel)]="post.Category"  >
+      </p-dropdown> 
+    
+     [attr.selected]="category.value === post.Category"-->
+      <ion-select id="cboCategories" name="cboCategories" 
+                style="width: 100%;min-width: 50px;"
+                placeholder="Select Category"
+                okText="Okay" cancelText="Dismiss"
+                [(ngModel)]="post.Category"
+                (ngModelChange)="onCboChangeCategory($event )" >
+                  <ion-select-option 
+                      *ngFor="let category of categories;" 
+                      value="{{category.value}}"   >
+                      {{category.label}}
+              </ion-select-option> 
+            </ion-select> 
+    </ion-item>
+    
+    </ion-list>
+  <p-editor [(ngModel)]="post.Body" [style]="{'height':'320px'}"></p-editor>
+  <br/>
+  <ion-list>
+    <ion-item>
+        <ion-checkbox [(ngModel)]="post.Private" name="Private" required ></ion-checkbox>
+            &nbsp; <ion-label color="primary" fixed>Private (only logged in users can see it).</ion-label>
+    </ion-item>
+  </ion-list>
+  <fieldset>
+    <legend>Other Details*</legend>
+         <attributes-list #lstAttributes 
+            [referenceUUID]="post.UUID"
+            [referenceType]="post.UUIDType"
+            [(attributes)]="post.Attributes" 
+            [(subTypes)]="postAttributeTypes"
+            [editing]="true" >
+          </attributes-list>
+          <label style="font-size:xx-small;" >*rating, phone number and other formatted details.</label>
+  </fieldset>
+  <ion-list>
+      <ion-item>
+        <ion-select id="cboStatus" name="cboStatus" 
+        style="width: 100%;min-width: 50px;"
+        placeholder="Select Status"
+        okText="Okay" cancelText="Dismiss"
+        [(ngModel)]="post.Status"
+        (ngModelChange)="onCboChangeStatus($event )" >
+          <ion-select-option 
+              *ngFor="let stat of status;" 
+              value="{{stat.value}}"  [attr.selected]="stat.value === post.Status"  >
+              {{stat.label}}
+      </ion-select-option> 
+    </ion-select> 
+        <!--
+        <p-dropdown  [options]="status"  name="postStatus" appendTo="body"
+            style="width:100%;background-color: white;"
+              (onChange)="onCboChangeStatus($event )"
+              placeholder="Status"
+              [style]="{  'width':'100%',  'z-index':'900 !important', 'position':'relative  !important' }"
+              [(ngModel)]="post.Status"  >
+        </p-dropdown> -->
+      </ion-item>
+  </ion-list>
+  <ion-list>
+
+    <ion-item>
+        <app-datetime #publishDate  style="width:100%; margin-bottom: 5px;margin-top:5px;"
+        [(DateValue)]="post.PublishDate" 
+        [Title]="'Publish Date'"
+        [ShowDate]='true'
+        [ShowTime]='true'
+        (eventDateChanged)="onChangedPublishDate( )"
+      ></app-datetime>
+    </ion-item>
+  </ion-list>
+  <ion-row  > 
+      <ion-col>
+          
+          <button *ngIf="saving === false" 
+            
+            (click)="savePost()"
+            class="login_btn"
+            type="button" expand="block">Save</button>
+            <div *ngIf="saving === true" >
+                <ion-spinner *ngIf="saving === true"  style="display: block;margin: auto;"  ></ion-spinner>
+              </div>
+      </ion-col>
+    <ion-col>
+        <button *ngIf="saving === false" 
+       
+        (click)="dismiss()"
+        class="white_btn"
+        type="button" expand="block">Cancel</button>
+        <!--
+          [disabled]="message.Comment.length === 0 || saving === true" 
+           [disabled]="message.Comment.length === 0 || saving === true" -->
+  </ion-col>      
+  </ion-row>
+</ion-content>
+        

@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="light">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -7,62 +7,126 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
 
   <div class="signup-logo">
-    <img src="assets/img/greenwerx_header.png" alt="GreenWerx Logo">
+  <img src="assets/img/header.dark.png" alt="GreenWerxLogo">
   </div>
-  <div *ngIf="loading  === false" innerHtml="{{message}}" style="display: block;margin: auto;"></div>
+  <div *ngIf="loading  === false" innerHtml="{{message}}" style="display: block;margin: auto;color:red;"></div>
   <ion-spinner *ngIf="loading === true"  style="display: block;margin: auto;"  ></ion-spinner>
-  <form *ngIf="loading === false" #signupForm="ngForm" novalidate>
+
+  <form *ngIf="loading === false" role="form"  [formGroup]="form" (ngSubmit)="onSignup()"  id="ngForm" #signUpForm="ngForm"  >
     <ion-list lines="none">
         <ion-item>
-            <ion-label position="stacked" color="primary">Email</ion-label>
-            <ion-input [(ngModel)]="user.Email" name="email" type="text" #email="ngModel" required>
-            </ion-input>
+           <!-- <ion-label position="stacked" color="light">Email</ion-label>-->
+            <ion-input placeholder="Email" [(ngModel)]="user.Email" #Email formControlName="Email" type="text" required  ></ion-input>
           </ion-item>
-          <ion-text color="danger">
-            <p [hidden]="email.valid || submitted == false" padding-left>
-              Email is required
-            </p>
+          <ion-text class="dangerColor">
+            <p  *ngIf="form.controls.Email.touched && !form.controls.Email.valid" padding-left >Email is required</p>
           </ion-text>
 
       <ion-item>
-        <ion-label position="stacked" color="primary">Username</ion-label>
-        <ion-input [(ngModel)]="user.Name" name="name" type="text" #name="ngModel" required>
-        </ion-input>
+        <!--<ion-label   position="stacked" color="light">Username</ion-label> -->
+        <!--Max length is becuase wordpress nicename field is 50. fucking stupid. -->
+        <ion-input placeholder="Username" maxlength="50" [(ngModel)]="user.Name" #Username formControlName="Username" type="text" required  ></ion-input>
       </ion-item>
-      <ion-text color="danger">
-        <p [hidden]="name.valid || submitted == false" padding-left>
+      <ion-text   class="dangerColor">
+        <p    *ngIf="form.controls.Username.touched && !form.controls.Username.valid" padding-left >
           Username is required
         </p>
       </ion-text>
 
       <ion-item>
-        <ion-label position="stacked" color="primary">Password</ion-label>
-        <ion-input [(ngModel)]="user.Password" name="password" type="password" #password="ngModel" required>
-        </ion-input>
+        <!--<ion-label position="stacked" color="light">Password</ion-label> -->
+            <ion-input placeholder="Password" [(ngModel)]="user.Password" #Password formControlName="Password" type="password" required  ></ion-input>
       </ion-item>
-      <ion-text color="danger">
-        <p [hidden]="password.valid || submitted == false" padding-left>
+      <ion-text  class="dangerColor">
+        <p  *ngIf="form.controls.Password.touched && !form.controls.Password.valid" padding-left>
           Password is required
         </p>
       </ion-text>
-
       <ion-item>
-          <ion-label position="stacked" color="primary">Confirm Password</ion-label>
-          <ion-input [(ngModel)]="user.ConfirmPassword" name="confirmPassword" type="password" #confirmPassword="ngModel" required>
-          </ion-input>
+          <!--<ion-label position="stacked" color="light">Confirm Password</ion-label> -->
+          <ion-input placeholder="Confirm Password" [(ngModel)]="user.ConfirmPassword" #ConfirmPassword formControlName="ConfirmPassword" type="password" required  ></ion-input>
         </ion-item>
-        <ion-text color="danger">
-          <p [hidden]="user.ConfirmPassword === user.Password || submitted == false" padding-left>
+        <ion-text class="dangerColor">
+           <!--Note that here I'm checking for form.errors.passwordShouldMatch
+                                            because this validation is applied at the form itself.-->
+          <p  *ngIf="form.controls.ConfirmPassword.touched && form.errors && form.errors.passwordsShouldMatch" padding-left>
             Passwords must match.
           </p>
         </ion-text>
+        <ion-item>
+          <ion-label  >DOB</ion-label>
+          <ion-datetime #DOB 
+          max="{{currentYear - 17}}" 
+           formControlName="DOB" displayFormat="MMM DD YYYY" placeholder="Select your date of birth.." 
+                    (ngModelChange)="dobChanged($event)"   [(ngModel)]="user.DOB" required></ion-datetime>
+         </ion-item>
+         <ion-text  class="dangerColor">
+          <p *ngIf="form.controls.DOB.touched && validAge === false" padding-left>
+            You must be at least 18 to access this sight.
+          </p>
+        </ion-text>
+         <ion-item>
+              <p-dropdown #Gender formControlName="Gender" [options]="genders"    appendTo="body" style="width:100% !important;"
+                (onChange)="onCboChangeGender($event )"
+              placeholder="Select Gender"
+              [style]="{  'width':'100% !important','z-index':'900 !important', 'position':'relative !important' }"
+              [(ngModel)]="user.Gender"  ></p-dropdown>
+           
+        </ion-item>
+        <ion-text  class="dangerColor">
+            <p *ngIf="form.controls.Gender.touched && !form.controls.Gender.valid" padding-left>
+              You must select a gender.
+            </p>
+          </ion-text>
+        <ion-item>
+            <p-dropdown #Relationship formControlName="Relationship"  [options]="relationships"  color="light"  
+                    appendTo="body" style="width:100% !important;"
+            (onChange)="onCboChangeRelationship($event )"
+            placeholder="Select Status"
+            [style]="{  'width':'100% !important','z-index':'900 !important', 'position':'relative !important' }"
+            [(ngModel)]="user.RelationshipStatus"  required></p-dropdown>
+      </ion-item>
+      <ion-text  class="dangerColor">
+        <p *ngIf="form.controls.Relationship.touched && !form.controls.Relationship.valid" padding-left>
+          You must select a status.
+        </p>
+      </ion-text>
     </ion-list>
+    <ion-list lines="none">
+    <ion-item>
+      <!--    All Rights Reserved © {{domainName}} {{currentYear}} |
+         <a routerLink="/docs/privacynotice.html" routerLinkActive="active">Privacy Policy</a> | 
+         <a routerLink="/docs/eula.html" routerLinkActive="active">Terms of Service</a>
+         (click)="onAgreeToTosClick($event);"
+        -->
+        <ion-checkbox #TOS formControlName="TOS"  
+                   [(ngModel)]="agreedToTOS" name="TOS" required ></ion-checkbox>
+         &nbsp; <ion-label color="primary" fixed>Agree to Terms of Service</ion-label>
+       
+      </ion-item>
+      <a href="{{baseUrl}}/docs/eula.html" target="_blank" >Terms of Service</a>
+      <a href="{{baseUrl}}/docs/privacynotice.html"  target="_blank" style="float:right;" >Privacy Policy</a>
 
-    <div padding>
-      <ion-button (click)="onSignup(signupForm)" type="button" expand="block">Create</ion-button>
+      <ion-text  class="dangerColor">
+          <p *ngIf="form.controls.TOS.touched && !form.controls.TOS.valid" padding-left>
+            You accept the Terms of Service.
+          </p>
+        </ion-text>
+    </ion-list>
+      <div padding >
+        <app-honeypot #hp ></app-honeypot>
+      </div>
+    <div padding >
+         
+      <button   *ngIf="!loading" class="register_angkar_btn" 
+        (click)="onSignup()" type="button"  class="register_angkar_btn"  >
+          Sign Up
+      </button>
+      <div *ngIf="loading"   style="width:100%; text-align: center;" ><ion-spinner   style="display: block;margin: auto;"  ></ion-spinner> </div>
+
     </div>
   </form>
 

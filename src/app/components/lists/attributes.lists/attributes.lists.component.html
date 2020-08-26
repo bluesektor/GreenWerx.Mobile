@@ -1,0 +1,64 @@
+<div *ngIf="editing === false" >
+    <ion-item *ngFor="let attribute of attributes">
+        <div style="float:left;width:48%;">
+          <label ><strong>{{attribute.Name}}:</strong></label>
+        </div>
+        <div style="float:left;width:48%;">
+          <label  >{{attribute.Value}}</label>
+        </div>
+      </ion-item>  
+</div>
+
+<div *ngIf="editing === true" >
+  <table style="width:100%;">
+    <tr>
+      <th *ngIf="subTypes !== undefined && subTypes.length > 0" >Type</th>
+      <th style="text-align: left;">Name</th>
+      <th  style="text-align: left;">Value</th>
+      <th  style="text-align: left;">Order</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let attribute of attributes" >
+       <td style="width: 25%;" *ngIf="subTypes !== undefined && subTypes.length > 0" >
+          <div  style="width:100%;" >
+            <ion-select id="cboHeightOptions" name="cboHeightOptions" 
+                style="width: 100%;min-width: 50px;"
+                placeholder="Select Type"
+                okText="Okay" cancelText="Dismiss"
+                [(ngModel)]="attribute.UUIDType"
+                (ngModelChange)="onCboChangeSubType($event, attribute )" >
+                     
+                  <ion-select-option 
+                      *ngFor="let subType of subTypes;" 
+                      value="{{subType.label}}"  [attr.selected]="subType.label === attribute.UUIDType"  >
+                      {{subType.label}}
+              </ion-select-option> 
+            </ion-select> 
+          </div>
+        </td>
+        <td style="width: 25%;">
+          <ion-input name="AttributeName" placeholder="Name" [(ngModel)]="attribute.Name"></ion-input>
+        </td>
+        <td style="width:25%">
+          <ion-input name="AttributeValue" placeholder="Value" [(ngModel)]="attribute.Value"></ion-input>
+        </td>
+        <td style="width:10%">
+          <ion-input name="AttributeOrder" placeholder="Order" [(ngModel)]="attribute.SortOrder"></ion-input>
+        </td>
+        <td style="width:15%;">
+          <button class="danger_btn" style="height:32px;width:95%"  (click)="deleteAttribute(attribute)" type="button">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+        </td>
+    </tr>
+  </table>
+      <ion-toolbar   >
+        <ion-buttons   slot="secondary">
+          <ion-button  class="login_btn"  (click)="newAttribute()">New</ion-button>
+        </ion-buttons>
+    
+      </ion-toolbar>
+ 
+</div>
+
+  

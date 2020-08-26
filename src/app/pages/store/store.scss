@@ -1,0 +1,84 @@
+ /*app-store {
+
+  these work for changing the top nav buttons.
+  ion-segment-button {
+    font-size: 16px !important;
+    color: red !important;
+    border: 0px !important;
+    border-radius: 0px !important;
+}
+
+.segment-button-checked{
+  background-color:  #3880ff !important;
+  color: yellow  !important;
+  border-bottom: #3880ff !important;
+}
+
+  
+}
+*/
+
+// for fab button labels
+ion-fab-button {
+  margin-left: 140px;
+  overflow: visible;
+  position: relative;
+}
+ion-fab-list {
+  ion-label {
+    position: relative;
+    top: 40px;
+    right: 25px;
+    color: white;
+    background-color: rgba(0,0,0,0.7);
+    line-height: 24px;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+}
+ion-fab {
+  ion-badge {
+    position: relative;
+    top: 10px;
+    left: 140px;
+  }
+}
+
+$categories: (
+ ionic: var(--ion-color-primary),
+ angular: #ac282b,
+ communication: #8e8d93,
+ tooling: #fe4c52,
+ services: #fd8b2d,
+ design: #fed035,
+ workshop: #69bb7b,
+ food: #3bc7c4,
+ documentation: #b16be3,
+ navigation: #6600cc,
+);
+
+
+page-events {
+  @each $track, $value in map-remove($categories) {
+    ion-item-sliding[track=#{$track}] ion-label {
+      border-left: 2px solid $value;
+      padding-left: 10px;
+    }
+
+    ion-item-option[color=favorite] {
+      background-color: var(--ion-color-favorite);
+    }
+  }
+}
+
+.searchbar-ios.searchbar-show-cancel.cancel-icon-color .searchbar-ios-cancel {
+  color: yellow;
+  background-color: red;
+}
+.searchbar-active{
+  .searchbar-ios-cancel{
+    color: yellow;
+    background-color: red;
+    }
+}
+
