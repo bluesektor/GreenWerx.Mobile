@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { StorePage } from './store.page';
 import { InViewportModule } from 'ng-in-viewport';
 import { StoreFilterPage } from '../store-filter/store-filter';
+import {ProductFilterPage} from '../product-filter/product-filter';
 import {StorePageListsComponentModule} from '../../components/lists/storepagelists/store.page.lists.module';
  // ---=== Admin ===---
  // import {EventModalModule} from '../admin/event-modal/event-modal.module';  // '..//event-modal/event-modal.module';
@@ -29,7 +30,7 @@ import {StorePageListsComponentModule} from '../../components/lists/storepagelis
    // MenuPageModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [StorePage, StoreFilterPage],
-  entryComponents: [    StoreFilterPage  ]
+  declarations: [StorePage, StoreFilterPage,ProductFilterPage],
+  entryComponents: [    StoreFilterPage,ProductFilterPage  ]
 })
 export class StorePageModule {}

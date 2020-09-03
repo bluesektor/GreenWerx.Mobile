@@ -58,7 +58,7 @@ todo    add posts code from old admin
 
         <ion-item-options  >
             <ion-item-option  *ngIf="segment === 'all'  &&  sessionService.CurrentSession.UserUUID !== ''" 
-                              style="color:#3880ff;"  
+                              style="color:#20ff20;"  
                               (click)="addFavoriteItem(slidingItem, item)" >
               Favorite</ion-item-option>
             <ion-item-option *ngIf="segment === 'favorites'  && sessionService.CurrentSession.UserUUID !== ''" 
@@ -100,7 +100,7 @@ todo    add posts code from old admin
                       Edit
                     </ion-item-option>
                     <ion-item-option  *ngIf="segment === 'all'  &&  sessionService.CurrentSession.UserUUID !== ''" 
-                                      style="color:#3880ff;"  
+                                      style="color:#20ff20;"  
                                       (click)="addFavoriteItem(slidingItem, item)" >
                       Favorite</ion-item-option>
                     <ion-item-option *ngIf="segment === 'favorites'  && sessionService.CurrentSession.UserUUID !== ''" 

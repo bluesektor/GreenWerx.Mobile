@@ -500,20 +500,20 @@ public async accountEdit(item) {
     });
   }
 
-  async loadHosts() {
-    console.log('store.page.lists.component.ts loadHosts    sessionService.CurrentSession :', this.sessionService.CurrentSession );
+  async loadVendors() {
+    console.log('store.page.lists.component.ts loadVendors    sessionService.CurrentSession :', this.sessionService.CurrentSession );
     const tidx = Timer.start('store.page.lists.component.ts loadEvents');
     const filter = this.filterService.getFilter(this.viewType);
   //  if (   this.isAdmin === true) {
    //   filter.IncludePrivate = true;
    // }
 
-    console.log('store.page.lists.component.ts loadHosts filter :', filter);
+    console.log('store.page.lists.component.ts loadVendors filter :', filter);
     this.isLoading = true;
     this.noDataMessage = '';
     await this.accountService.getAllAccounts(filter).subscribe(response => {
         this.noDataMessage = '';
-        console.log('store.page.lists.component.ts loadHosts   response:', response);
+        console.log('store.page.lists.component.ts loadVendors   response:', response);
       if (ObjectFunctions.isValid(this.refresherRef) === true) {
         this.refresherRef.complete();
       }
@@ -523,7 +523,7 @@ public async accountEdit(item) {
       }
 
         const data = response as ServiceResult;
-      console.log('store.page.lists.component.ts loadHosts   data:', data);
+      console.log('store.page.lists.component.ts loadVendors   data:', data);
         if (data.Code !== 200) {
         this.isLoading = false;
           this.messages.publish('api:err', data);
@@ -549,7 +549,7 @@ public async accountEdit(item) {
       if (this.itemCount === 0) {
         this.noDataMessage = 'No results.';
       }
-      console.log('storepage.TS loadHosts    this.cache.products:',  this.cache.products);
+      console.log('storepage.TS loadVendors    this.cache.products:',  this.cache.products);
       // App logic to determine if all data is loaded
       // and disable the infinite scroll
       if (
@@ -558,7 +558,7 @@ public async accountEdit(item) {
       ) {
         this.infinitListEvent.target.disabled = true; // event.target.disabled = true;
       }
-      console.log('listItems.ts loadHosts segment:', this.segment);
+      console.log('listItems.ts loadVendors segment:', this.segment);
       this.addBottomSpacer();
       Timer.stop(tidx);
       this.isLoading = false;
@@ -566,7 +566,7 @@ public async accountEdit(item) {
     err => {
       this.isLoading = false;
       this.noDataMessage = '';
-      console.log('storepage.TS loadHosts  err:', err);
+      console.log('storepage.TS loadVendors  err:', err);
 
       if (ObjectFunctions.isValid(this.refresherRef) === true) {
         this.refresherRef.complete();
@@ -773,7 +773,7 @@ public async accountEdit(item) {
         break;
       case 'ACCOUNT':
       case 'HOST':
-        this.loadHosts();
+        this.loadVendors();
         break;
       default:
         this.loadEvents();

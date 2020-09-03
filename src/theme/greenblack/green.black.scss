@@ -22,10 +22,10 @@
  
 $colors: (
   primary:    (base: #76A94C, contrast:#000),
-  secondary:  (base: #007ACC, contrast: #000),
+  secondary:  (base: yellow, contrast: #000),
   danger:     #f43e00,
   light:      (base:#bdc3c7, contrast:#000),
-  dark:       (base:#3880ff, contrast:#000),
+  dark:       (base:#5B974E, contrast:#000),
   alert:      #F39C12,
   
 ) !default;
@@ -45,7 +45,7 @@ $colors: (
 // --ion-color-secondary-shade:  ${Color(secondary).darken(shadeRatio)};
 // --ion-color-secondary-tint: ${Color(secondary).lighten(tintRatio)};
 
---ion-color-dark: #3880ff;
+--ion-color-dark: #5B974E;
 --ion-color-dark-rgb: 211, 84, 0;
 --ion-color-dark-contrast:  #000000;
 --ion-color-dark-contrast-rgb: 0,0,0;
@@ -67,7 +67,7 @@ $colors: (
  // --ion-color-danger-tint: ${Color(danger).lighten(tintRatio)};
 
 
-$--ion-color-base:  #3880ff;
+$--ion-color-base:  #5B974E;
 --ion-color-contrast: #000;
 
 $background-color:           #363232 !default;
